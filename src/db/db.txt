@@ -1,0 +1,110 @@
+CREATE DATABASE lims1;
+USE lims1;
+
+CREATE TABLE analista (
+	id_analista INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_analista VARCHAR(50) NOT NULL,
+    apellido_analista VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE producto_proceso(
+	fecha_analisis DATE DEFAULT(CURRENT_DATE) NOT NULL,
+    fecha_toma_muestra DATE NOT NULL,
+    nombre_producto ENUM('bebida semi elaborada','bebida pasteurizada','corte de bebida lactea') NOT NULL,
+    saborizacion ENUM('fresa', 'melocotón', 'mora', 'kumis', '') NULL,
+	tanque ENUM('Tanque 7','Tanque 9','Tanque 10','Tanque 12', 'alternativo') NOT NULL,
+    tanque_alt VARCHAR(20) NULL,
+	hora_toma_muestra TIME NOT NULL,
+	lote VARCHAR(100) NOT NULL,
+	responsable_analisis INT NOT NULL,
+    observaciones VARCHAR(255) NULL,
+	id_producto_proceso VARCHAR(30) PRIMARY KEY, -- LoteSaborPresentación_id
+
+    FOREIGN KEY (responsable_analisis) REFERENCES analista(id_analista)
+);
+
+CREATE TABLE producto_terminado(
+    fecha_analisis DATE DEFAULT(CURRENT_DATE) NOT NULL,
+	fecha_empaque DATE NOT NULL,
+    hora_empaque TIME NOT NULL,
+    referencia VARCHAR(30) NULL,
+	presentacion ENUM('1000', '200') NOT NULL,
+    maquina_envasadora ENUM('m1', 'm2', 'm3', 'm4') NOT NULL,
+    lote VARCHAR(100) NOT NULL,
+	id_producto_terminado VARCHAR(30) PRIMARY KEY, -- LoteSaborPresentación_id
+    responsable_analisis INT NOT NULL,
+    observaciones VARCHAR(255) NULL,
+    
+    FOREIGN KEY (responsable_analisis) REFERENCES analista(id_analista)
+);
+
+CREATE TABLE resultado(
+	id_resultado INT AUTO_INCREMENT PRIMARY KEY,
+    fecha_registro DATE DEFAULT (CURRENT_DATE) NOT NULL,
+    Coliformes VARCHAR(4) DEFAULT ('<10') NOT NULL,
+    E_coli VARCHAR(4) DEFAULT ('<10') NOT NULL,
+    Mohos_levaduras VARCHAR(4) DEFAULT ('<10') NOT NULL,
+    observaciones VARCHAR(255) NULL,
+    id_producto_proceso VARCHAR(30) NULL,
+    id_producto_terminado VARCHAR(30) NULL,
+    
+    FOREIGN KEY (id_producto_proceso) REFERENCES producto_proceso(id_producto_proceso),
+	FOREIGN KEY (id_producto_terminado) REFERENCES producto_terminado(id_producto_terminado)
+);
+
+
+select * from producto_proceso;
+
+
+INSERT INTO analista (nombre_analista, apellido_analista)
+VALUES ('Juan', 'Perez');
+
+INSERT INTO analista (nombre_analista, apellido_analista)
+VALUES ('Maria', 'Gomez');
+
+INSERT INTO analista (nombre_analista, apellido_analista)
+VALUES ('Carlos', 'Lopez');
+
+
+INSERT INTO producto_proceso (
+    fecha_analisis, fecha_toma_muestra, nombre_producto, saborizacion, tanque, tanque_alt, 
+    hora_toma_muestra, lote, responsable_analisis, observaciones, id_producto_proceso)
+VALUES 
+    ('2024-10-01', '2024-09-30', 'bebida pasteurizada', 'fresa', 'Tanque 7', NULL, 
+     '08:00:00', 'LOTE001', 1, 'Muestra inicial sin alteraciones', 'LOTE001FresaTanque7'),
+
+    ('2024-10-02', '2024-10-01', 'bebida semi elaborada', 'melocotón', 'Tanque 9', NULL, 
+     '09:30:00', 'LOTE002', 2, 'Segunda muestra recolectada', 'LOTE002MelocotónTanque9'),
+
+    ('2024-10-03', '2024-10-02', 'corte de bebida lactea', 'mora', 'Tanque 12', NULL, 
+     '11:00:00', 'LOTE003', 3, 'Tercera muestra para análisis', 'LOTE003MoraTanque12');
+
+INSERT INTO producto_terminado (
+    fecha_analisis, fecha_empaque, hora_empaque, referencia, presentacion, maquina_envasadora, 
+    lote, responsable_analisis, observaciones, id_producto_terminado)
+VALUES 
+    ('2024-10-01', '2024-09-30', '14:00:00', 'REF001', '1000', 'm1', 
+     'LOTE001', 1, 'Lote terminado sin alteraciones', 'LOTE001_1000_m1'),
+
+    ('2024-10-02', '2024-10-01', '15:30:00', 'REF002', '200', 'm2', 
+     'LOTE002', 2, 'Producto envasado correctamente', 'LOTE002_200_m2'),
+
+    ('2024-10-03', '2024-10-02', '16:00:00', 'REF003', '1000', 'm3', 
+     'LOTE003', 3, 'Lote revisado y aprobado', 'LOTE003_1000_m3');
+
+
+select * from resultado;
+
+
+INSERT INTO resultado (
+    fecha_registro, Coliformes, E_coli, Mohos_levaduras, observaciones, 
+    id_producto_proceso, id_producto_terminado)
+VALUES 
+    ('2024-10-01', '<10', '<10', '<10', 'Sin crecimiento microbiano detectable', 
+     'LOTE001FresaTanque7', 'LOTE001_1000_m1'),
+
+    ('2024-10-02', '<10', '<10', '<10', 'Resultados dentro de especificaciones', 
+     'LOTE002MelocotónTanque9', 'LOTE002_200_m2'),
+
+    ('2024-10-03', '<10', '<10', '<10', 'Muestra sin presencia de patógenos', 
+     'LOTE003MoraTanque12', 'LOTE003_1000_m3');
