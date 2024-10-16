@@ -4,7 +4,7 @@ export const conexion = mysql2.createPool({
   host: "localhost",
   user: "root",
   password: "",
-  port: 3305,
+  port: 3306,
   database: "lims1",
 });
 

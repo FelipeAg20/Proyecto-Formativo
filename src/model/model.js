@@ -103,4 +103,64 @@ export class modelos {
       };
     }
   }
+  static async updatePP(id, body) {
+    try {
+      const rows = await conexion.execute(`UPDATE producto_proceso SET fecha_analisis, fecha_toma_muestra, nombre_producto, saborizacion, tanque, tanque_alt, hora_toma_muestra, lote, responsable_analisis, observaciones WHERE id_producto_proceso = 'LOTE005_200_m2'`)
+  
+      if (rows.length > 0) {
+        return rows
+      } else {
+        return { message: "No se encontró el producto en proceso con ese id" }
+      }
+    } catch (error) {
+      console.error("Error al actualizar el producto en proceso", error)
+      return {  
+        message: "Error al actualizar el producto en proceso" 
+      };
+    }
+  }
+
+  static async updatePT(id,body) {
+    try {
+      const rows = await conexion.execute(`UPDATE producto_proceso SET fecha_analisis, fecha_toma_muestra, nombre_producto, saborizacion, tanque, tanque_alt, hora_toma_muestra, lote, responsable_analisis, observaciones WHERE id_producto_proceso = 'LOTE005_200_m2'`)
+  
+      if (rows.length > 0) {
+        return rows
+      } else {
+        return { message: "No se encontró el producto en proceso con ese id" }
+      }
+    } catch (error) {
+      console.error("Error al actualizar el producto en proceso", error)
+      return { message: "Error al actualizar el producto en proceso" }
+    }
+  }
+  static async deletePP(id) {
+    try {
+      const rows = await conexion.execute("DELETE FROM producto_proceso WHERE id_producto_proceso = ?")
+
+      if (rows.length > 0) {
+        return rows
+      } else {
+        return { message: "No se encontró el producto en proceso con ese ID" }
+      }
+    } catch (error) {
+      console.error("Error al eliminar el producto en proceso", error)
+      return { message: "Error al eliminar el producto en proceso" }
+    }
+  }
+
+  static async deletePT(id) {
+    try {
+      const rows = await conexion.execute("DELETE FROM producto_terminado WHERE id_producto_terminado = ?")
+
+      if (rows.length > 0) {
+        return rows
+      } else {
+        return { message: "No se encontró el producto terminado con ese ID" }
+      }
+    } catch (error) {
+      console.error("Error al eliminar el producto terminado", error)
+      return { message: "Error al eliminar el producto terminado" }
+    }
+  }
 }

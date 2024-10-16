@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { conexion } from "../db/conexion.js";
-import { getAllPP,getAllPT,getAllR,createNewPP,createNewPT} from "../controller/controllers.js";
+import { getAllPP,getAllPT,getAllR,createNewPP,createNewPT,updatePP,updatePT, deletePP, deletePT} from "../controller/controllers.js";
 
 export const router = Router();
 
@@ -26,26 +26,7 @@ router
 
   .post("/registrar_pp",createNewPP )
   .post("/registrar_pt", createNewPT)
-  .delete("/eliminar_productoP:id",(req, res) =>{
-    const id = req.params.id
-    conexion.query('DELETE FROM `producto_proceso` WHERE `id`= ?',[id],(err) =>{
-        if(err){
-            throw err;
-        }else{
-            res.status(200 ).send(`Elemto de id : ${id}Eliminado`);
-        }
-    })
-  })
-  .delete("/eliminar_productoT:id",(req, res) =>{
-    const id = req.params.id
-    conexion.query('DELETE FROM `producto_proceso` WHERE `id`= ?',[id],(err) =>{
-        if(err){
-            throw err;
-        }else{
-            res.status(200 ).send(`Elemto de id : ${id}Eliminado`);
-        }
-    })
-  })
-  .patch("/:id",(req, res) =>{
-    
-  })
+  .put('/producto_proceso/:id', updatePP)
+  .put('/producto_terminado/:id', updatePT)
+  .delete("/eliminar_productoP:id",deletePP)
+  .delete("/eliminar_productoT:id",deletePT)

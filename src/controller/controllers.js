@@ -62,3 +62,57 @@ export const createNewPT = async (req, res) => {
       .json({ message: "Error al crear el producto terminado", error: err });
   }
 };
+
+export const updatePP = async (req, res) => {
+  try {
+    const reqBody = req.body
+    const id = req.params.id
+
+    const updatedPP = await modelos.updatePP(id, reqBody);
+    
+      res.status(200).json({ message: "Producto en proceso actualizado con éxito", result: updatedPP });
+    
+  } catch (err) {
+    res.status(500).json({ message: "Error al actualizar el producto en proceso", error: err });
+  }
+};
+
+export const updatePT = async (req, res) => {
+  try {
+    const reqBody = req.body
+    const id = req.params.id
+
+    const updatedPT = await modelos.updatePT(id, reqBody);
+
+    res.status(200).json({ message: "Producto terminado actualizado con éxito", result: updatedPT });
+
+  } catch (err) {
+    res.status(500).json({ message: "Error al actualizar el producto terminado", error: err });
+  }
+};
+
+export const deletePP = async (req, res) => {
+  try {
+    const id = req.params.id
+
+    const deletedPP = await modelos.deletePP(id);
+
+    res.status(200).json({ message: "Producto en proceso eliminado con éxito", result: deletedPP });
+
+  } catch (err) {
+    res.status(500).json({ message: "Error al eliminar el producto en proceso", error: err });
+  }
+};
+
+export const deletePT = async (req, res) => {
+  try {
+    const id = req.params.id
+
+    const deletedPT = await modelos.deletePT(id);
+
+    res.status(200).json({ message: "Producto terminado eliminado con éxito", result: deletedPT });
+
+  } catch (err) {
+    res.status(500).json({ message: "Error al eliminar el producto terminado", error: err });
+  }
+};
