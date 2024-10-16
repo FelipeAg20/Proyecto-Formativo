@@ -68,7 +68,7 @@ export class modelos {
   static async createNewPP(body) {
     try {
       const rows = await conexion.execute(
-        " INSERT INTO producto_proceso (    fecha_analisis, fecha_toma_muestra, nombre_producto, saborizacion, tanque, tanque_alt, hora_toma_muestra, lote, responsable_analisis, observaciones, id_producto_proceso  ) VALUES    ('2024-10-05', '2024-10-04', '16:30:00', 'REF005', '200', 'm2',   'LOTE005', 2, 'Producto empaquetado correctamente', 'LOTE005_200_m2')"
+        " INSERT INTO producto_proceso (    fecha_analisis, fecha_toma_muestra, nombre_producto, saborizacion, tanque, tanque_alt, hora_toma_muestra, lote, responsable_analisis, observaciones, id_producto_proceso  ) VALUES    ('2024-10-05', '2024-10-04', 'martin', 'REF005', '200', 'm2',   'LOTE005', 2, 'Producto empaquetado correctamente', 'LOTE005_200_m2', 'a')"
       );
       if (rows.length > 0) {
         return rows;
