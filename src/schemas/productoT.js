@@ -1,7 +1,6 @@
 import {z} from 'zod';
 
 export const schemaNewPP = z.object({
-    fecha_analisis: z.date(),
     fecha_empaque: z.date(),
     hora_empaque: z.string(),
     referencia: z.string().optional(),

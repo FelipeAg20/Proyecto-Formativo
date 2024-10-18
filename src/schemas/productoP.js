@@ -1,12 +1,10 @@
 import {z} from 'zod';
 
 export const schemaNewPP = z.object({
-    fecha_analisis: z.date(),
     fecha_toma_muestra: z.date(),
     nombre_producto: z.enum(['bebida semi elaborada','bebida pasteurizada','corte de bebida lactea']),
-    saborizacion: z.enum(['fresa', 'melocotón', 'mora', 'kumis', '']).optional(),
     tanque:  z.enum(['Tanque 7','Tanque 9','Tanque 10','Tanque 12', 'alternativo']),
-    tanque_alt: z.string().optional(),
+    tanque_alt: z.string().optional(), // es un enum preguntar a christian si ya tiene las opciones
     hora_toma_muestra: z.string(),
     lote: z.string(),
     responsable_analisis: z.number(),
