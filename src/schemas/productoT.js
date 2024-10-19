@@ -1,8 +1,8 @@
 import {z} from 'zod';
 
-export const schemaNewPP = z.object({
-    fecha_analisis: z.date(),
-    fecha_empaque: z.date(),
+export const schemaNewPT = z.object({
+    fecha_analisis: z.string().transform((str) => new Date(str)),
+    fecha_empaque: z.string().transform((str) => new Date(str)),
     hora_empaque: z.string(),
     referencia: z.string().optional(),
     presentacion: z.enum(['1000', '200']),
@@ -28,3 +28,6 @@ CREATE TABLE producto_terminado(
     FOREIGN KEY (responsable_analisis) REFERENCES analista(id_analista)
 );
 */
+export function validarNewPT(obj) {
+    return schemaNewPT.safeParse(obj)
+};
