@@ -1,122 +1,131 @@
 import { conexion } from "../db/conexion.js";
 export class modelos {
-  static async getAllPP() {
+  static async getAllPP() {//TERMINADA
     try {
       const [rows] = await conexion.execute("SELECT * FROM `producto_proceso`");
 
       if (rows.length > 0) {
-        return rows;
+        return { success: true, message: "Exito trayendo los productos en proceso", result: rows };
       } else {
-        return {
-          message: "No se encontraron productos en proceso 1",
-        };
+        return { success: true, message: "No se encontraron productos en proceso" };
       }
     } catch (error) {
-      console.error("Error al traer los productos en proceso 2", error.message);
-      return {
-        message: "Error al traer los productos en proceso 3",
-        error: error.message,
-      };
+      return { success: false, message: "Error al traer los productos en proceso", error: error };
     }
   }
-  static async getAllPT() {
+
+  static async getAllPT() {//TERMINADA
     try {
       const rows = await conexion.execute("SELECT * FROM `producto_terminado`");
 
       if (rows.length > 0) {
-        return { success: true, data: rows };
+        return { success: true, message: "Exito trayendo los productos terminados", result: rows };
       } else {
-        return {
-          message: "No se encontraron productos terminados",
-        };
+        return { success: true, message: "No se encontraron productos terminados" };
       }
     } catch (error) {
-      console.error("Error al traer los productos terminados", error);
-      return {
-        message: "Error al traer los productos terminados",
-      };
+      return { success: false, message: "Error al traer los productos terminados", error: error };
     }
   }
-  static async getAllR() {
+
+
+  static async getAllR() {//TERMINADA
     try {
       const rows = await conexion.execute("SELECT * FROM `resultado`");
 
       if (rows.length > 0) {
-        return { success: true, data: rows };
+        return { success: true, message: "Exito trayendo los resultados", result: rows };
       } else {
-        return { success: false, message: "No se encontraron resultados" };
+        return { success: true, message: "No se encontraron resultados" };
       }
     } catch (error) {
-      console.error("Error al traer los resultados", error);
-      return { success: false, message: "Error al traer los resultados" };
+      return { success: false, message: "Error al traer los productos terminados", error: error };
     }
   }
+
+
   static async getDatePP() {
     try {
-      const rows = await conexion.execute("SELECT * FROM `resultado`");
+      const rows = await conexion.execute("SELECT * FROM resultado WHERE fecha_registro = ? ", [body.fecha_registro]);
 
       if (rows.length > 0) {
-        return { success: true, data: rows };
+        return { success: true, message: "Exito trayendo los resultados por fecha", result: rows };
       } else {
-        return { success: false, message: "No se encontraron resultados" };
+        return { success: true, message: "No se encontraron resultados en esa fecha" };
       }
     } catch (error) {
-      console.error("Error al traer los resultados", error);
-      return { success: false, message: "Error al traer los resultados" };
+      return { success: false, message: "Error al traer los resultados por fecha", error: error };
     }
   }
-  static async createNewPP(body) {
+
+
+
+
+  static async createNewPP(body) {//TERMINADA
     try {
-      const rows = await conexion.execute(
-        " INSERT INTO producto_proceso (    fecha_analisis, fecha_toma_muestra, nombre_producto, saborizacion, tanque, tanque_alt, hora_toma_muestra, lote, responsable_analisis, observaciones, id_producto_proceso  ) VALUES    ('2024-10-05', '2024-10-04', 'martin', 'REF005', '200', 'm2',   'LOTE005', 2, 'Producto empaquetado correctamente', 'LOTE005_200_m2', 'a')"
+      const values =[body.fecha_analisis, body.fecha_toma_muestra, body.nombre_producto, body.saborizacion, body.tanque, body.tanque_alt, body.hora_toma_muestra, body.lote, body.responsable_analisis, body.observaciones, body.id_producto_proceso  ]
+
+      const [rows ]= await conexion.execute(
+        " INSERT INTO producto_proceso (    fecha_analisis, fecha_toma_muestra, nombre_producto, saborizacion, tanque, tanque_alt, hora_toma_muestra, lote, responsable_analisis, observaciones, id_producto_proceso  ) VALUES    (?,?,?,?,?,?,?,?,?,?,?)",
+       values
       );
-      if (rows.length > 0) {
-        return rows;
+      if (rows.affectedRows > 0) {
+        return { success: true, message: "Exito creando el nuevo producto en proceso"};
       } else {
-        return {
-          message: "No se pudo crear el producto en proceso ",
-        };
+        return { success: false, message: "Error creando el nuevo producto en proceso"};
       }
     } catch (error) {
-      console.error("Error al crear el productos en proceso", error);
-      return {
-        message: "Error al crear el productos en proceso",
-      };
+      return { success: false, message: "Error interno al crear el nuevo producto en proceso", error: error };
     }
   }
-  static async createNewPT(body) {
+  static async createNewPT(body) {//TERMINADA
     try {
-      const rows = await conexion.execute(
-        "INSERT INTO producto_terminado (  fecha_analisis, fecha_empaque, hora_empaque, referencia, presentacion, maquina_envasadora, lote, responsable_analisis, observaciones, id_producto_terminado  ) VALUES  ('2024-10-04', '2024-10-03', '15:00:00', 'REF004', '1000', 'm1',    'LOTE004', 1, 'Lote terminado correctamente', 'LOTE004_1000_m1')"
-      );
-      if (rows.length > 0) {
-        return rows;
+      const values =[body.fecha_analisis, body.fecha_empaque, body.hora_empaque, body.referencia, body.presentacion, body.maquina_envasadora, body.lote, body.responsable_analisis, body.observaciones, body.id_producto_terminado  ]
+      const [rows] = await conexion.execute(
+        "INSERT INTO producto_terminado (  fecha_analisis, fecha_empaque, hora_empaque, referencia, presentacion, maquina_envasadora, lote, responsable_analisis, observaciones, id_producto_terminado  ) VALUES  (?,?,?,?,?,?,?,?,?,?)",
+      values);
+      if (rows.affectedRows > 0) {
+        return { success: true, message: "Exito creando el nuevo producto terminado"};
       } else {
-        return {
-          message: "No se pudo crear el producto terminado",
-        };
+        return { success: false, message: "Error creando el nuevo producto terminado"};
       }
     } catch (error) {
-      console.error("Error al crear el productos en proceso2", error);
-      return {
-        message: "Error al crear el productos terminado",
-      };
+      return { success: false, message: "Error interno al crear el nuevo producto terminado", error: error };
     }
   }
-  static async updatePP(id, body) {
+
+  static async createNewR(body) {//TERMINADA
     try {
-      const rows = await conexion.execute(`UPDATE producto_proceso SET fecha_analisis, fecha_toma_muestra, nombre_producto, saborizacion, tanque, tanque_alt, hora_toma_muestra, lote, responsable_analisis, observaciones WHERE id_producto_proceso = 'LOTE005_200_m2'`)
+      const values =[body.fecha_registro, body.Coliformes, body.E_coli, body.Mohos_levaduras, body.observaciones, body.id_producto_proceso, body.id_producto_terminado]
+      const [rows] = await conexion.execute(
+        "INSERT INTO resultado (fecha_registro, Coliformes, E_coli, Mohos_levaduras, observaciones, id_producto_proceso, id_producto_terminado)VALUES   (?,?,?,?,?,?,?)",
+      values);
+      if (rows.affectedRows > 0) {
+        return { success: true, message: "Exito ingresando el nuevo resultado"};
+      } else {
+        return { success: false, message: "Error ingresando el nuevo resultado"};
+      }
+    } catch (error) {
+      return { success: false, message: "Error interno al ingresar el nuevo resultado", error: error };
+    }
+  }
   
-      if (rows.length > 0) {
-        return rows
+  static async updatePP(id, body) {
+    const values = [body.fecha_analisis , body.fecha_toma_muestra , body.nombre_producto , body.saborizacion , body.tanque , body.tanque_alt , body.hora_toma_muestra , body.lote , body.responsable_analisis , body.observaciones]
+    const aidi = id
+    const consulta =`UPDATE producto_proceso SET fecha_analisis =?, fecha_toma_muestra =?, nombre_producto =?, saborizacion =?, tanque =?, tanque_alt =?, hora_toma_muestra =?, lote =?, responsable_analisis =?, observaciones=? WHERE id_producto_proceso = '${aidi}'`
+    
+    try {
+      const rows = await conexion.execute(`UPDATE producto_proceso SET fecha_analisis =?, fecha_toma_muestra =?, nombre_producto =?, saborizacion =?, tanque =?, tanque_alt =?, hora_toma_muestra =?, lote =?, responsable_analisis =?, observaciones=? WHERE id_producto_proceso = '${aidi}'`,values)
+
+      
+      if (rows.affectedRows > 0) {
+        return { success: true, message: "Exito actualizando el producto en proceso"};
       } else {
-        return { message: "No se encontró el producto en proceso con ese id" }
+        return { success: false, message: "Error actualizando el producto en proceso"};
       }
     } catch (error) {
-      console.error("Error al actualizar el producto en proceso", error)
-      return {  
-        message: "Error al actualizar el producto en proceso" 
-      };
+      return { success: false, message: "Error interno al actualizar el producto en proceso", error: error };
     }
   }
 
@@ -124,28 +133,30 @@ export class modelos {
     try {
       const rows = await conexion.execute(`UPDATE producto_proceso SET fecha_analisis, fecha_toma_muestra, nombre_producto, saborizacion, tanque, tanque_alt, hora_toma_muestra, lote, responsable_analisis, observaciones WHERE id_producto_proceso = 'LOTE005_200_m2'`)
   
-      if (rows.length > 0) {
-        return rows
+      if (rows.affectedRows > 0) {
+        return { success: true, message: "Exito actualizando el producto terminado"};
       } else {
-        return { message: "No se encontró el producto en proceso con ese id" }
+        return { success: false, message: "Error actualizando el producto terminado"};
       }
     } catch (error) {
-      console.error("Error al actualizar el producto en proceso", error)
-      return { message: "Error al actualizar el producto en proceso" }
+      return { success: false, message: "Error interno al actualizar el producto terminado", error: error };
     }
   }
-  static async deletePP(id) {
-    try {
-      const rows = await conexion.execute("DELETE FROM producto_proceso WHERE id_producto_proceso = ?")
 
-      if (rows.length > 0) {
-        return rows
+  static async deletePP(id) {
+    console.log(id);
+    const aidi = id.id
+    try {
+
+      const rows = await conexion.execute("DELETE FROM producto_proceso WHERE id_producto_proceso = ?",[aidi])
+
+      if (rows.affectedRows > 0) {
+        return { success: true, message: "Exito eliminando el producto en proceso"};
       } else {
-        return { message: "No se encontró el producto en proceso con ese ID" }
+        return { success: false, message: "Error eliminando el producto en proceso"};
       }
     } catch (error) {
-      console.error("Error al eliminar el producto en proceso", error)
-      return { message: "Error al eliminar el producto en proceso" }
+      return { success: false, message: "Error interno al eliminar el producto en proceso", error: error };
     }
   }
 
@@ -153,14 +164,13 @@ export class modelos {
     try {
       const rows = await conexion.execute("DELETE FROM producto_terminado WHERE id_producto_terminado = ?")
 
-      if (rows.length > 0) {
-        return rows
+      if (rows.affectedRows > 0) {
+        return { success: true, message: "Exito eliminando el producto terminado"};
       } else {
-        return { message: "No se encontró el producto terminado con ese ID" }
+        return { success: false, message: "Error eliminando el producto terminado"};
       }
     } catch (error) {
-      console.error("Error al eliminar el producto terminado", error)
-      return { message: "Error al eliminar el producto terminado" }
+      return { success: false, message: "Error interno al eliminar el producto terminado", error: error };
     }
   }
 }

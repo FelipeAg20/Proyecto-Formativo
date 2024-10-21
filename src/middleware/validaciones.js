@@ -1,26 +1,81 @@
-import {z} from 'zod';
+import { validarNewPP, validarPPParcial } from "../schemas/productoP.js";
+import { validarNewPT } from "../schemas/productoT.js";
+import { validarNewR } from "../schemas/resultado.js";
 
 
-
-const esquema = z.object({
-    nombre: z.string({
-        message: "Letras papa"
-    }),
-    director: z.string({
-        message: "Letras papa"
-    }),
-    genero: z.string({
-        message: "Letras papa"
-    }),
-    puntuacion: z.number().positive().default(5)
-});
-
-// const esquemaido = z.object({}
-
-export function validacion(objValid) {
-    return esquema.safeParse(objValid)
+export function pP(req, res, next) {
+  try {
+    const body = validarNewPP(req.body);
+    if (body.error) {
+      return res.status(422).json({
+        status: false,
+        message: "Parametos es invalidos",
+        error: body.error,
+      });
+    } else {
+      next();
+    }
+  } catch (e) {
+    console.log("Error en los parametros" + e.message);
+    return res
+      .status(500)
+      .json({ status: false, message: "Error interno del servidor", error: e.message });
+  }
 }
-
-export function validacionParcial(objValid) {
-    return esquema.partial().safeParse(objValid)
+export function pT(req, res, next) {
+  try {
+    const body = validarNewPT(req.body);
+    if (body.error) {
+      return res.status(422).json({
+        status: false,
+        message: "Parametos es invalidos",
+        error: body.error,
+      });
+    } else {
+      next();
+    }
+  } catch (e) {
+    console.log("Error en los parametros" + e.message);
+    return res
+      .status(500)
+      .json({ status: false, message: "Error interno del servidor", error: e.message });
+  }
+}
+export function r(req, res, next) {
+  try {
+    const body = validarNewR(req.body);
+    if (body.error) {
+      return res.status(422).json({
+        status: false,
+        message: "Parametos es invalidos",
+        error: body.error,
+      });
+    } else {
+      next();
+    }
+  } catch (e) {
+    console.log("Error en los parametros" + e.message);
+    return res
+      .status(500)
+      .json({ status: false, message: "Error interno del servidor", error: e.message });
+  }
+}
+export function parcialPP(req, res, next) {
+  try {
+    const body = validarPPParcial(req.body);
+    if (body.error) {
+      return res.status(422).json({
+        status: false,
+        message: "Parametos es invalidos",
+        error: body.error,
+      });
+    } else {
+      next();
+    }
+  } catch (e) {
+    console.log("Error en los parametros" + e.message);
+    return res
+      .status(500)
+      .json({ status: false, message: "Error interno del servidor", error: e.message });
+  }
 }
