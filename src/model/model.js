@@ -13,7 +13,6 @@ export class modelos {
       return { success: false, message: "Error al traer los productos en proceso", error: error };
     }
   }
-
   static async getAllPT() {//TERMINADA
     try {
       const rows = await conexion.execute("SELECT * FROM `producto_terminado`");
@@ -27,8 +26,6 @@ export class modelos {
       return { success: false, message: "Error al traer los productos terminados", error: error };
     }
   }
-
-
   static async getAllR() {//TERMINADA
     try {
       const rows = await conexion.execute("SELECT * FROM `resultado`");
@@ -42,8 +39,6 @@ export class modelos {
       return { success: false, message: "Error al traer los productos terminados", error: error };
     }
   }
-
-
   static async getDatePP() {
     try {
       const rows = await conexion.execute("SELECT * FROM resultado WHERE fecha_registro = ? ", [body.fecha_registro]);
@@ -57,10 +52,6 @@ export class modelos {
       return { success: false, message: "Error al traer los resultados por fecha", error: error };
     }
   }
-
-
-
-
   static async createNewPP(body) {//TERMINADA
     try {
       const values =[body.fecha_analisis, body.fecha_toma_muestra, body.nombre_producto, body.saborizacion, body.tanque, body.tanque_alt, body.hora_toma_muestra, body.lote, body.responsable_analisis, body.observaciones, body.id_producto_proceso  ]
