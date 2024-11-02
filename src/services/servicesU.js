@@ -1,6 +1,6 @@
-import { hash } from "../helpers/hash";
-import { modelRegister } from "../model/modelRegister";
-import { modelLogin } from "../model/modelLogin";
+import { hash } from "../helpers/hash.js";
+import { modelRegister } from "../model/modelRegister.js";
+import { modelLogin } from "../model/modelLogin.js";
 
 export class serviceUser {
   static async hashRegister(user) {

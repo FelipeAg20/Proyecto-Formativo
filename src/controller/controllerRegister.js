@@ -1,5 +1,5 @@
-import { validarRegister } from "../schemas/register";
-import { serviceUser } from "../services/servicesU";
+import { validarRegister } from "../schemas/register.js";
+import { serviceUser } from "../services/servicesU.js";
 
 export let register = async (req, res) => {
     console.log(req.body);
