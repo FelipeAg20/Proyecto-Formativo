@@ -1,10 +1,11 @@
 import { conexion } from "../db/conexion.js";
 export function modelRegister(obj){
         const sql =
-          "INSERT INTO usuario (dni,nombres,contraseña) VALUES (?, ?, ?)";
+          "INSERT INTO usuarios (dni,nombre,roll,contraseña) VALUES (?, ?, ?,?)";
         const values = [
-          obj.nombres,
           obj.dni, 
+          obj.nombre,
+          obj.roll,
           obj.contraseña,
         ];
         return conexion.execute(sql, values);

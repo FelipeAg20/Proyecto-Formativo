@@ -7,26 +7,25 @@ import { serviceUser } from "../services/servicesU.js";
 
 export let login = async (req, res) => {
   console.log(req.body);
-   req.body
+   
   const result = validarLogin(req.body);
   
   if (result.error) {
     return res.status(401).json({ success: false, message: "Error de validacion", error: result.error});
   } else {
-    let { dni, pass } = req.body;
+    let { dni, contraseña } = req.body;
     let usuario = {
       dni: dni,
-      pass: pass,
+      contraseña: contraseña,
     };
     const result = await serviceUser.login(usuario);
     if (result.success) {
-      const resultToken = generateToken({ id: result.id }, process.env.TOKEN);
+      const resultToken = generateToken({ dni:usuario.dni }, process.env.KEY);
       
       return res
         .status(200)
         .json({ success: true, message: "Login exitoso", result: resultToken})
-         .cookie('tokenAcc',resultToken,{httpOnly:true,sameSite:'strict',maxAge:18000}) //que es esto?
-
+        
          
     } else {
       return res

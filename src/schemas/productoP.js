@@ -3,13 +3,13 @@ import { z } from "zod";
 export const schemaNewPP = z.object({
   fecha_analisis: z.string().transform((str) => new Date(str)),
   fecha_toma_muestra: z.string().transform((str) => new Date(str)),
-  nombre_producto: z.enum([
+  nombre_pp: z.enum([
     "bebida semi elaborada",
     "bebida pasteurizada",
     "corte de bebida lactea",
   ]),
   saborizacion: z.enum(["fresa", "melocotón", "mora", "kumis", ""]).optional(),
-  tanque: z.enum([
+  punto_muestra: z.enum([
     "Tanque 7",
     "Tanque 9",
     "Tanque 10",

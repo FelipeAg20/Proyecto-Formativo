@@ -2,10 +2,18 @@ import mysql2 from "mysql2/promise";
 import dotenv from 'dotenv';
 dotenv.config()
 export const conexion = mysql2.createPool({
-  host: process.env.DB_HOST||"localhost",
+  //ESTO LO HIZZO FELIPE PORQUE NO ME ENTA SIRVIENDO EL .ENV
+
+  /*host: process.env.DB_HOST||"localhost",
   user:process.env.DB_USER||"root",
   password:process.env.DB_PASSWORD ||"1234",
   database:process.env.DB_NOMBRE ||"lims1",
+  port:process.env.DB_PORT || 3305*/
+  
+  host: "localhost",
+  user:"root",
+  password:"",
+  database:process.env.DB_NOMBRE ||"lim5",
   port:process.env.DB_PORT || 3305
 });
 

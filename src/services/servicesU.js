@@ -4,7 +4,9 @@ import { modelLogin } from "../model/modelLogin.js";
 
 export class serviceUser {
   static async hashRegister(user) {
-    user.pass = await hash(user.pass);
+    console.log(user.contraseña);
+    
+    user.contraseña = await hash(user.contraseña);
     return modelRegister(user);
   }
   static async login(user) {

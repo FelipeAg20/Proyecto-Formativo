@@ -10,7 +10,7 @@ export let register = async (req, res) => {
     }else{
         let nuevoR = req.body
 
-        const nuevo = await serviceUser.hashRegister(nuevoR.pass)
+        const nuevo = await serviceUser.hashRegister(nuevoR)
         
         res.status(200).json({messaje:'Creado con exito',dni:nuevoR.dni})
     }

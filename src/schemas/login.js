@@ -1,8 +1,9 @@
 import {z} from 'zod';
 
 export const schemaLogin = z.object({
-  dni: z.string().max(12).min(7),
+  dni: z.number(),
   contraseña: z.string()
+ 
 })
 
 
