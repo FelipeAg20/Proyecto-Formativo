@@ -1,9 +1,9 @@
 import {z} from 'zod';
 
 export const schemaRegister = z.object({
-  dni: z.number(),
+  dni: z.string(),
   nombre: z.string(),
-  roll: z.enum(['administrador','analista']),
+  rol: z.enum(['administrador','analista']),
   contraseña :z.string()
   
 })

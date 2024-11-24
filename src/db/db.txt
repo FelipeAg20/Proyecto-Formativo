@@ -3,18 +3,12 @@ USE l1m5;
 
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    dni INT NOT NULL,
+    dni VARCHAR(14) NOT NULL,
     nombre VARCHAR(50) NOT NULL,
     contraseña varchar(256) NOT NULL,
-    roll ENUM('analista', 'administrador') NOT NULL
+    rol ENUM('analista', 'administrador') NOT NULL
 );
 
-CREATE TABLE saborizacion(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    sabor ENUM('Mora','Melocoton', 'Fresa'),
-    id_pp INT,
-    FOREIGN KEY (id_pp) REFERENCES producto_proceso(id)
-);
 
 CREATE TABLE producto_proceso (
 	id INT PRIMARY KEY AUTO_INCREMENT,
@@ -29,6 +23,14 @@ CREATE TABLE producto_proceso (
     punto_alterno VARCHAR(50) NULL,
     FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
 );
+
+CREATE TABLE saborizacion(
+	id INT PRIMARY KEY AUTO_INCREMENT,
+    sabor ENUM('Mora','Melocoton', 'Fresa'),
+    id_pp INT,
+    FOREIGN KEY (id_pp) REFERENCES producto_proceso(id)
+);
+
 
 CREATE TABLE producto_terminado (
 	id VARCHAR(255) PRIMARY KEY,
