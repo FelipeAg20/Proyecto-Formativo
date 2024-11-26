@@ -11,7 +11,7 @@ export let login = async (req, res) => {
   const result = validarLogin(req.body);
   
   if (result.error) {
-    return res.status(401).json({ success: false, message: "Error de validacion", error: result.error});
+    return res.status(400).json({ success: false, message: "Error de validacion", error: result.error});
   } else {
     let { dni, contraseña } = req.body;
     let usuario = {
@@ -24,9 +24,8 @@ export let login = async (req, res) => {
       
       return res
         .status(200)
-        .json({ success: true, message: "Login exitoso", result: resultToken})
+        .json({ success: true, message: "Inicio de sesion exitoso", result: resultToken})
         
-         
     } else {
       return res
         .status(401)
