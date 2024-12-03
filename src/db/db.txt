@@ -44,8 +44,7 @@ observaciones VARCHAR(255) NULL,
 responsable_analisis INT,
 
 id_producto_proceso INT,
-FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
-
+FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id),
 FOREIGN KEY (id_producto_proceso) REFERENCES producto_proceso(id)
 );
 
