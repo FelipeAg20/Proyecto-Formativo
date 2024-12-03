@@ -20,8 +20,13 @@ export let login = async (req, res) => {
     };
     const result = await serviceUser.login(usuario);
     if (result.success) {
-      const resultToken = generateToken({ dni:usuario.dni }, process.env.KEY);
-      
+      const resultToken = "";
+      if(result.rol == "analista"){
+        resultToken = generateToken({ id: result.id }, process.env.KEY_ANALISTA);
+      }else{
+        resultToken = generateToken({ id: result.id }, process.env.KEY_ADMINISTRADOR);
+      }
+
       return res
         .status(200)
         .json({ success: true, message: "Inicio de sesion exitoso", result: resultToken})
