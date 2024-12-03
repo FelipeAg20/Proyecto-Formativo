@@ -82,7 +82,7 @@ export class modelos {
     try {
       const values =[ body.fecha_env, body.fecha_vencimiento, body.ref, 
         body.presentacion, body.lote, body.hora_empaque, body.maquina_envasadora, 
-        body.observaciones, body.responsable_analisis, body.id_producto_proceso  ]
+        body.observaciones ?? null, body.responsable_analisis, body.id_producto_proceso  ]
       const [rows] = await conexion.execute(
         "INSERT INTO producto_terminado ( fecha_env, fecha_vencimiento, ref, presentacion, lote, hora_empaque, maquina_envasadora, observaciones,responsable_analisis, id_producto_proceso ) VALUES  (?,?,?,?,?,?,?,?,?,?)",
       values);
@@ -98,7 +98,7 @@ export class modelos {
 
   static async createNewR(body) {//TERMINADA
     try {
-      const values =[body.fecha_analisis, body.e_coli, body.coliformes, body.mohos_ley, body.observaciones, body.cabina, body.medio_cultivo, body.id_pp, body.id_pt]
+      const values =[body.fecha_analisis, body.e_coli, body.coliformes, body.mohos_ley, body.observaciones ?? null, body.cabina ?? null, body.medio_cultivo ?? null, body.id_pp, body.id_pt]
       const [rows] = await conexion.execute(
         "INSERT INTO resultados (fecha_analisis, e_coli, coliformes, mohos_ley, observaciones, cabina, medio_cultivo, id_pp, id_pt)VALUES   (?,?,?,?,?,?,?,?,?)",
       values);

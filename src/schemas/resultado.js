@@ -6,8 +6,8 @@ export const schemaNewR = z.object({
     coliformes: z.string(),
     mohos_ley: z.string(),
     observaciones: z.string().optional(),
-    cabina: z.enum(['C','NC']),
-    medio_cultivo: z.enum(['C','NC']),
+    cabina: z.enum(['C','NC']).optional(),
+    medio_cultivo: z.enum(['C','NC']).optional(),
     id_pp: z.number().optional(),
     id_pt: z.number().optional()
 })
