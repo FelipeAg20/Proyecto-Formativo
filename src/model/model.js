@@ -15,7 +15,7 @@ export class modelos {
   }
   static async getAllPT() {//TERMINADA
     try {
-      const rows = await conexion.execute("SELECT * FROM `producto_terminado`");
+      const [rows] = await conexion.execute("SELECT * FROM `producto_terminado`");
 
       if (rows.length > 0) {
         return { success: true, message: "Exito trayendo los productos terminados", result: rows };
@@ -98,7 +98,7 @@ export class modelos {
 
   static async createNewR(body) {//TERMINADA
     try {
-      const values =[body.fecha_analisis, body.e_coli, body.coliformes, body.mohos_ley, body.observaciones ?? null, body.cabina ?? null, body.medio_cultivo ?? null, body.id_pp, body.id_pt]
+      const values =[body.fecha_analisis, body.e_coli, body.coliformes, body.mohos_ley, body.observaciones ?? null, body.cabina ?? null, body.medio_cultivo ?? null, body.id_pp ?? null, body.id_pt ?? null]
       const [rows] = await conexion.execute(
         "INSERT INTO resultados (fecha_analisis, e_coli, coliformes, mohos_ley, observaciones, cabina, medio_cultivo, id_pp, id_pt)VALUES   (?,?,?,?,?,?,?,?,?)",
       values);
