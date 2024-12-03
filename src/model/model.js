@@ -59,8 +59,8 @@ export class modelos {
       
       const values = [
         body.nombre_pp, body.fecha_analisis, body.fecha_toma_muestra,
-        body.hora_toma_muestra, body.lote, body.observaciones,
-        body.responsable_analisis, body.punto_muestra, body.punto_alterno
+        body.hora_toma_muestra, body.lote, body.observaciones ?? null,
+        body.responsable_analisis, body.punto_muestra, body.punto_alterno ?? null
       ];
   
       const [rows] = await conexion.execute(
