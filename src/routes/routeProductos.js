@@ -4,7 +4,7 @@ import { getAllPP,getAllPT,getAllR,createNewPP,createNewPT,updatePP,updatePT, de
 import { pP,pT,r, parcialPP} from "../middleware/validaciones.js";
 export const routerProductos = Router();
 
-router
+routerProductos
 
   //RUTAS DE OBTENER PP,PT Y R TERMINADAS
   .get("/producto_proceso", getAllPP)

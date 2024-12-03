@@ -4,7 +4,7 @@ import { login } from "../controller/controllerLogin.js";
 
 export const routerUsuarios = Router()
 
-router
+routerUsuarios
   //RUTA PARA REGISTRARSE
   .post("/register",register)
   //RUTA PARA LOGIN 
