@@ -53,21 +53,25 @@ export class modelos {
     }
   }
 
-  static async createNewPP(body) {//TERMINADA
+  static async createNewPP(body) {
     try {
-      const values =[
-        body.nombre_pp, body.fecha_analisis, body.fecha_toma_muestra, 
-        body.hora_toma_muestra, body.lote, body.observaciones, 
-        body.responsable_analisis, body.punto_muestra, body.punto_alterno]
-
-      const [rows ]= await conexion.execute(
-        " INSERT INTO producto_proceso ( nombre_pp, fecha_analisis, fecha_toma_muestra, hora_toma_muestra, lote, observaciones, responsable_analisis, punto_muestra, punto_alterno) VALUES    (?,?,?,?,?,?,?,?,?,?,?)",
-       values
+      console.log(body);
+      
+      const values = [
+        body.nombre_pp, body.fecha_analisis, body.fecha_toma_muestra,
+        body.hora_toma_muestra, body.lote, body.observaciones,
+        body.responsable_analisis, body.punto_muestra, body.punto_alterno
+      ];
+  
+      const [rows] = await conexion.execute(
+        "INSERT INTO producto_proceso (nombre_pp, fecha_analisis, fecha_toma_muestra, hora_toma_muestra, lote, observaciones, responsable_analisis, punto_muestra, punto_alterno) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        values
       );
+  
       if (rows.affectedRows > 0) {
-        return { success: true, message: "Exito creando el nuevo producto en proceso"};
+        return { success: true, message: "Éxito creando el nuevo producto en proceso" };
       } else {
-        return { success: false, message: "Error creando el nuevo producto en proceso"};
+        return { success: false, message: "Error creando el nuevo producto en proceso" };
       }
     } catch (error) {
       return { success: false, message: "Error interno al crear el nuevo producto en proceso", error: error };
