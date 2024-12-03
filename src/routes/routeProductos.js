@@ -2,16 +2,9 @@ import { Router } from "express";
 import { conexion } from "../db/conexion.js";
 import { getAllPP,getAllPT,getAllR,createNewPP,createNewPT,updatePP,updatePT, deletePP, deletePT,createNewR} from "../controller/controllers.js";
 import { pP,pT,r, parcialPP} from "../middleware/validaciones.js";
-import { register } from "../controller/controllerRegister.js";
-import { login } from "../controller/controllerLogin.js";
-export const router = Router();
+export const routerProductos = Router();
 
 router
-  //RUTA PARA REGISTRARSE
-  .post("/register",register)
-  //RUTA PARA LOGIN 
-  .post("/login",login)
-
 
   //RUTAS DE OBTENER PP,PT Y R TERMINADAS
   .get("/producto_proceso", getAllPP)
