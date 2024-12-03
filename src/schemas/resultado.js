@@ -1,15 +1,15 @@
 import {z} from 'zod';
 
 export const schemaNewR = z.object({
-    
-    fecha_registro: z.string().transform((str) => new Date(str)),
-    Coliformes: z.string(),
-    E_coli: z.string(),
-    Mohos_levaduras: z.string(),
+    fecha_analisis: z.string().transform((str) => new Date(str)),
+    e_coli: z.string(),
+    coliformes: z.string(),
+    mohos_ley: z.string(),
     observaciones: z.string().optional(),
-    id_producto_proceso: z.string(),
-    id_producto_terminado: z.string()
-
+    cabina: z.enum(['C','NC']),
+    medio_cultivo: z.enum(['C','NC']),
+    id_pp: z.number().optional(),
+    id_pt: z.number().optional()
 })
 export function validarNewR(obj) {
     return schemaNewR.safeParse(obj)
