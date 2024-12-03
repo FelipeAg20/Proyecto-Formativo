@@ -10,6 +10,7 @@ app.use(cors());
 app.use(express.json());
 const port = process.env.PORT || 3001;
 app.use("/producto", router);
+app.use("/usuarios", router);
 app.listen(port, function (err) {
   if (err) {
     throw err;
