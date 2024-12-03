@@ -2,231 +2,233 @@ CREATE DATABASE l1m5;
 USE l1m5;
 
 CREATE TABLE usuarios (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    dni INT NOT NULL,
-    nombre VARCHAR(50) NOT NULL,
-    contraseña varchar(256) NOT NULL,
-    roll ENUM('analista', 'administrador') NOT NULL
-);
-
-CREATE TABLE saborizacion(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    sabor ENUM('Mora','Melocoton', 'Fresa'),
-    id_pp INT,
-    FOREIGN KEY (id_pp) REFERENCES producto_proceso(id)
+id INT AUTO_INCREMENT PRIMARY KEY,
+dni VARCHAR(14) NOT NULL,
+nombre VARCHAR(50) NOT NULL,
+contraseña VARCHAR(256) NOT NULL,
+correo VARCHAR(50) NULL,
+rol ENUM('analista', 'administrador') NOT NULL
 );
 
 CREATE TABLE producto_proceso (
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre_pp ENUM('bebida semi elaborada','bebida pasteurizada', 'corte de bebida lactea'),
-    fecha_analisis DATE DEFAULT (CURRENT_DATE),
-    fecha_toma_muesta DATE,
-    hora_tome_muestra TIME,
-    lote VARCHAR(100),
-    observaciones VARCHAR(255) NULL,
-    responsable_analisis INT,
-    punto_muestra ENUM('Tanque 7','Tanque 9','Tanque 10','Tanque 12','alternativo'),
-    punto_alterno VARCHAR(50) NULL,
-    FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
+id INT PRIMARY KEY AUTO_INCREMENT,
+nombre_pp ENUM('bebida semi elaborada','bebida pasteurizada', 'corte de bebida lactea'),
+fecha_analisis DATE DEFAULT (CURRENT_DATE),
+fecha_toma_muestra DATE,
+hora_toma_muestra TIME,
+lote VARCHAR(100),
+observaciones VARCHAR(255) NULL,
+responsable_analisis INT,
+punto_muestra ENUM('Tanque 7','Tanque 9','Tanque 10','Tanque 12','alternativo'),
+punto_alterno VARCHAR(50) NULL,
+FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
+);
+
+CREATE TABLE saborizacion(
+id INT PRIMARY KEY AUTO_INCREMENT,
+sabor ENUM('Mora','Melocoton', 'Fresa'),
+id_pp INT,
+FOREIGN KEY (id_pp) REFERENCES producto_proceso(id)
 );
 
 CREATE TABLE producto_terminado (
-	id VARCHAR(255) PRIMARY KEY,
-    fecha_env DATE DEFAULT (CURRENT_DATE),
-    fecha_vencimiento DATE,
-    ref VARCHAR(100),
-    presentacion ENUM('1000', '200'),
-    lote VARCHAR(100),
-    hora_empaque TIME,
-    maquina_envasadora ENUM('m1', 'm2', 'm3', 'm4'),
-    observaciones VARCHAR(255) NULL,
-    responsable_analisis INT,
-    FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
+id INT PRIMARY KEY AUTO_INCREMENT,
+fecha_env DATE DEFAULT (CURRENT_DATE),
+fecha_vencimiento DATE,
+ref VARCHAR(100),
+presentacion ENUM('1000', '200'),
+lote VARCHAR(100),
+hora_empaque TIME,
+maquina_envasadora ENUM('m1', 'm2', 'm3', 'm4'),
+observaciones VARCHAR(255) NULL,
+responsable_analisis INT,
+
+id_producto_proceso INT,
+FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id),
+FOREIGN KEY (id_producto_proceso) REFERENCES producto_proceso(id)
 );
 
 CREATE TABLE resultados(
-	id INT PRIMARY KEY AUTO_INCREMENT,
-    fecha_analisis DATE,
-    e_coli VARCHAR(5),
-    coliformes VARCHAR(5),
-    mohos_ley VARCHAR(5),
-    observaciones VARCHAR(255) NULL,
-    cabina ENUM('C','NC') NULL,
-    medio_cultivo ENUM('C','NC') NULL,
-    id_pp INT NULL,
-    id_pt VARCHAR(255) NULL,
-    FOREIGN KEY (id_pp) REFERENCES producto_proceso(id),
-    FOREIGN KEY (id_pt) REFERENCES producto_terminado(id)
+id INT PRIMARY KEY AUTO_INCREMENT,
+fecha_analisis DATE,
+e_coli VARCHAR(5),
+coliformes VARCHAR(5),
+mohos_ley VARCHAR(5),
+observaciones VARCHAR(255) NULL,
+cabina ENUM('C','NC') NULL,
+medio_cultivo ENUM('C','NC') NULL,
+id_pp INT NULL,
+id_pt INT NULL,
+FOREIGN KEY (id_pp) REFERENCES producto_proceso(id),
+FOREIGN KEY (id_pt) REFERENCES producto_terminado(id)
 );
 
-
 CREATE TABLE leche_cruda (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    fecha_analisis DATE,
-    observaciones VARCHAR(100) NULL,
-    responsable_analisis INT,
-    fecha_toma_muestra DATE,
-    ruta_recoleccion VARCHAR(100),
-    placa_vehiculo VARCHAR(20),
-    FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
+id INT PRIMARY KEY AUTO_INCREMENT,
+fecha_analisis DATE,
+observaciones VARCHAR(100) NULL,
+responsable_analisis INT,
+fecha_toma_muestra DATE,
+ruta_recoleccion VARCHAR(100),
+placa_vehiculo VARCHAR(20),
+FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
 );
 
 CREATE TABLE resultados_leche_cruda (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    fecha_analisis DATE,
-    mesofilos VARCHAR(5),
-    psicrofilos VARCHAR(5),
-    observaciones VARCHAR(100) NULL,
-    cabina ENUM('C','NC') NULL,
-    medio_cultivo ENUM('C','NC') NULL,
-    responsable_analisis INT,
-    FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
+id INT PRIMARY KEY AUTO_INCREMENT,
+fecha_analisis DATE,
+mesofilos VARCHAR(5),
+psicrofilos VARCHAR(5),
+observaciones VARCHAR(100) NULL,
+cabina ENUM('C','NC') NULL,
+medio_cultivo ENUM('C','NC') NULL,
+responsable_analisis INT,
+FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
 );
 
 CREATE TABLE insumos_produccion (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    fecha_analisis DATE,
-    fecha_toma_muestra DATE,
-    lote_produccion VARCHAR(100),
-    fecha_produccion DATE,
-    fecha_vencimiento DATE,
-    observaciones VARCHAR(255) NULL,
-    responsable_analisis INT,
-    FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
+id INT PRIMARY KEY AUTO_INCREMENT,
+fecha_analisis DATE,
+fecha_toma_muestra DATE,
+lote_produccion VARCHAR(100),
+fecha_produccion DATE,
+fecha_vencimiento DATE,
+observaciones VARCHAR(255) NULL,
+responsable_analisis INT,
+FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
 );
 
 CREATE TABLE resultados_insumos_produccion (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-	fecha_analisis DATE,
-    mesofilos VARCHAR(5),
-    mohos_levaduras VARCHAR(5),
-    coliformes VARCHAR(5),
-    e_coli VARCHAR(5),
-    observaciones VARCHAR(255) NULL,
-	cabina ENUM('C','NC') NULL,
-    medio_cultivo ENUM('C','NC') NULL, 
-    responsable_analisis INT,
-    FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
+id INT PRIMARY KEY AUTO_INCREMENT,
+fecha_analisis DATE,
+mesofilos VARCHAR(5),
+mohos_levaduras VARCHAR(5),
+coliformes VARCHAR(5),
+e_coli VARCHAR(5),
+observaciones VARCHAR(255) NULL,
+cabina ENUM('C','NC') NULL,
+medio_cultivo ENUM('C','NC') NULL,
+responsable_analisis INT,
+FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
 );
 
 CREATE TABLE registro_UHT (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    maquina_envasadora ENUM('TBA8', 'ESSI A2') NOT NULL,
-    cabezal ENUM('izq', 'der', 'a', 'b') NOT NULL,
-    nombre_muestra ENUM('producción', 'Eventos') NOT NULL,
-    referencia VARCHAR(100),
-    lote VARCHAR(100),
-    fecha_vencimiento DATE,
-    fecha_analisis DATE,
-    hora_empaque TIME,
-    observaciones VARCHAR(100),
-    responsable_analisis INT,
-    FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
+id INT PRIMARY KEY AUTO_INCREMENT,
+maquina_envasadora ENUM('TBA8', 'ESSI A2') NOT NULL,
+cabezal ENUM('izq', 'der', 'a', 'b') NOT NULL,
+nombre_muestra ENUM('producción', 'Eventos') NOT NULL,
+referencia VARCHAR(100),
+lote VARCHAR(100),
+fecha_vencimiento DATE,
+fecha_analisis DATE,
+hora_empaque TIME,
+observaciones VARCHAR(100),
+responsable_analisis INT,
+FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
 );
 
 CREATE TABLE resultados_UHT (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-	fecha_analisis DATE,
-    mesofilos VARCHAR(5),
-    observaciones VARCHAR(100) NULL,
-    fecha_emision_resultado DATE,
-	cabina ENUM('C','NC'),
-    medio_cultivo ENUM('C','NC'),
-    responsable_analisis INT,
-    FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
+id INT PRIMARY KEY AUTO_INCREMENT,
+fecha_analisis DATE,
+mesofilos VARCHAR(5),
+observaciones VARCHAR(100) NULL,
+fecha_emision_resultado DATE,
+cabina ENUM('C','NC'),
+medio_cultivo ENUM('C','NC'),
+responsable_analisis INT,
+FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
 );
 
-
 CREATE TABLE aguas_y_enjuagues (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    tipo ENUM('agua', 'enjuague') NOT NULL,
-    punto_toma_muestra VARCHAR(20),
-    fecha_analisis DATE,
-    observaciones VARCHAR(255) NULL,
-    fecha_toma_muestra DATE,
-    responsable_analisis INT,
-    FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
+id INT PRIMARY KEY AUTO_INCREMENT,
+tipo ENUM('agua', 'enjuague') NOT NULL,
+punto_toma_muestra VARCHAR(20),
+fecha_analisis DATE,
+observaciones VARCHAR(255) NULL,
+fecha_toma_muestra DATE,
+responsable_analisis INT,
+FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
 );
 
 CREATE TABLE resultados_aguas_y_enjuagues (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    fecha_analisis DATE,
-    mesofilos VARCHAR(5),
-    coliformes ENUM('Presencia', 'Ausencia'),
-    observaciones VARCHAR(100),
-	cabina ENUM('C','NC') NULL,
-    medio_cultivo ENUM('C','NC') NULL,
-    responsable_analisis INT,
-    FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
+id INT PRIMARY KEY AUTO_INCREMENT,
+fecha_analisis DATE,
+mesofilos VARCHAR(5),
+coliformes ENUM('Presencia', 'Ausencia'),
+observaciones VARCHAR(100),
+cabina ENUM('C','NC') NULL,
+medio_cultivo ENUM('C','NC') NULL,
+responsable_analisis INT,
+FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
 );
 
 CREATE TABLE superficies_y_equipos (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    fecha_analisis DATE,
-    fecha_toma_muestra DATE,
-    hora_toma_muestra TIME,
-    observaciones VARCHAR(255) NULL,
-    nombre VARCHAR(100),
-    responsable_analisis INT,
-    FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
+id INT PRIMARY KEY AUTO_INCREMENT,
+fecha_analisis DATE,
+fecha_toma_muestra DATE,
+hora_toma_muestra TIME,
+observaciones VARCHAR(255) NULL,
+nombre VARCHAR(100),
+responsable_analisis INT,
+FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
 );
 
 CREATE TABLE resultados_sup_eq (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    fecha_analisis DATE,
-    mesofilos VARCHAR(5),
-    coliformes VARCHAR(5),
-    e_coli VARCHAR(5),
-    mohos_levaduras VARCHAR(5),
-    observaciones VARCHAR(255) NULL,
-	cabina ENUM('C','NC') NULL,
-    medio_cultivo ENUM('C','NC') NULL,
-    responsable_analisis INT,
-    FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
+id INT PRIMARY KEY AUTO_INCREMENT,
+fecha_analisis DATE,
+mesofilos VARCHAR(5),
+coliformes VARCHAR(5),
+e_coli VARCHAR(5),
+mohos_levaduras VARCHAR(5),
+observaciones VARCHAR(255) NULL,
+cabina ENUM('C','NC') NULL,
+medio_cultivo ENUM('C','NC') NULL,
+responsable_analisis INT,
+FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
 );
 
 CREATE TABLE ambientes (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    fecha_toma_muestra DATE,
-    punto_toma_muestra VARCHAR(100),
-    observaciones VARCHAR(255) NULL,
-    responsable_analisis INT,
-    FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
+id INT PRIMARY KEY AUTO_INCREMENT,
+fecha_toma_muestra DATE,
+punto_toma_muestra VARCHAR(100),
+observaciones VARCHAR(255) NULL,
+responsable_analisis INT,
+FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
 );
 
 CREATE TABLE resultados_ambientes (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    fecha_analisis DATE,
-    mesofilos VARCHAR(5),
-    coliformes VARCHAR(5),
-    mohos_levaduras VARCHAR(5),
-    observaciones VARCHAR(255) NULL,
-    cabina ENUM('C','NC') NULL,
-    medio_cultivo ENUM('C','NC') NULL,
-    responsable_analisis INT,
-    FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
+id INT PRIMARY KEY AUTO_INCREMENT,
+fecha_analisis DATE,
+mesofilos VARCHAR(5),
+coliformes VARCHAR(5),
+mohos_levaduras VARCHAR(5),
+observaciones VARCHAR(255) NULL,
+cabina ENUM('C','NC') NULL,
+medio_cultivo ENUM('C','NC') NULL,
+responsable_analisis INT,
+FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
 );
 
 CREATE TABLE manipuladores (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    fecha_toma_muestra DATE,
-    fecha_analisis DATE,
-    nombre_operario VARCHAR(100),
-    responsable_analisis INT,
-    observaciones VARCHAR(255) NULL,
-    FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
+id INT PRIMARY KEY AUTO_INCREMENT,
+fecha_toma_muestra DATE,
+fecha_analisis DATE,
+nombre_operario VARCHAR(100),
+responsable_analisis INT,
+observaciones VARCHAR(255) NULL,
+FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
 );
 
 CREATE TABLE resultados_manipuladores (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    fecha_de_analisis DATE,
-    coliformes VARCHAR(5),
-    e_coli VARCHAR(5),
-    mohos_levaduras VARCHAR(5),
-    staphylococcus BOOLEAN,
-    observaciones VARCHAR(255) NULL,
-    cabina ENUM('C','NC') NULL,
-    medio_cultivo ENUM('C','NC') NULL,
-    responsable_analisis INT,
-    FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
+id INT PRIMARY KEY AUTO_INCREMENT,
+fecha_de_analisis DATE,
+coliformes VARCHAR(5),
+e_coli VARCHAR(5),
+mohos_levaduras VARCHAR(5),
+staphylococcus BOOLEAN,
+observaciones VARCHAR(255) NULL,
+cabina ENUM('C','NC') NULL,
+medio_cultivo ENUM('C','NC') NULL,
+responsable_analisis INT,
+FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
 );

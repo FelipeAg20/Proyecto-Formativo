@@ -10,10 +10,10 @@ export const conexion = mysql2.createPool({
   database:process.env.DB_NOMBRE ||"lims1",
   port:process.env.DB_PORT || 3305*/
   
-  host: "localhost",
-  user:"root",
-  password:"",
-  database:process.env.DB_NOMBRE ||"lim5",
+  host: process.env.DB_HOST||"localhost",
+  user: process.env.DB_USER || "root",
+  password:process.env.DB_PASSWORD || "",
+  database:process.env.DB_NOMBRE ||"l1m5",
   port:process.env.DB_PORT || 3305
 });
 

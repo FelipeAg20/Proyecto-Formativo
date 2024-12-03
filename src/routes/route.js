@@ -19,24 +19,6 @@ router
   .get("/producto_terminado", getAllPT)
   .get("/resultado", getAllR)
 
-  //----------------------------------------
-
-  //BUSCAR POR FECHA A MEDIAS   
-  .get("/:id", (req, res) => {
-    const id = req.params.id;
-    conexion.query(
-      "SELECT * FROM `pelicula` where id=?",
-      [id],
-      (err, results) => {
-        if (err) {
-          throw err;
-        } else {
-          res.send(results).status(200);
-          console.log(results);
-        }
-      }
-    );
-  })
   //--------------------------------------
 
   // RUTAS CON VALIDACIONES IMPLEMENTADAS

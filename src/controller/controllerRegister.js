@@ -2,7 +2,6 @@ import { validarRegister } from "../schemas/register.js";
 import { serviceUser } from "../services/servicesU.js";
 
 export let register = async (req, res) => {
-    console.log(req.body);
     const result = validarRegister(req.body)
     if (result.error){
         res.status(422).json({ error: result.error});

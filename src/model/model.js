@@ -15,7 +15,7 @@ export class modelos {
   }
   static async getAllPT() {//TERMINADA
     try {
-      const rows = await conexion.execute("SELECT * FROM `producto_terminado`");
+      const [rows] = await conexion.execute("SELECT * FROM `producto_terminado`");
 
       if (rows.length > 0) {
         return { success: true, message: "Exito trayendo los productos terminados", result: rows };
@@ -28,7 +28,7 @@ export class modelos {
   }
   static async getAllR() {//TERMINADA
     try {
-      const rows = await conexion.execute("SELECT * FROM `resultado`");
+      const rows = await conexion.execute("SELECT * FROM `resultados`");
 
       if (rows.length > 0) {
         return { success: true, message: "Exito trayendo los resultados", result: rows };
@@ -41,7 +41,7 @@ export class modelos {
   }
   static async getDatePP() {
     try {
-      const rows = await conexion.execute("SELECT * FROM resultado WHERE fecha_registro = ? ", [body.fecha_registro]);
+      const rows = await conexion.execute("SELECT * FROM resultados WHERE fecha_analisis= ? ", [body.fecha_registro]);
 
       if (rows.length > 0) {
         return { success: true, message: "Exito trayendo los resultados por fecha", result: rows };
@@ -52,28 +52,39 @@ export class modelos {
       return { success: false, message: "Error al traer los resultados por fecha", error: error };
     }
   }
-  static async createNewPP(body) {//TERMINADA
-    try {
-      const values =[body.fecha_analisis, body.fecha_toma_muestra, body.nombre_producto, body.saborizacion, body.tanque, body.tanque_alt, body.hora_toma_muestra, body.lote, body.responsable_analisis, body.observaciones, body.id_producto_proceso  ]
 
-      const [rows ]= await conexion.execute(
-        " INSERT INTO producto_proceso (    fecha_analisis, fecha_toma_muestra, nombre_producto, saborizacion, tanque, tanque_alt, hora_toma_muestra, lote, responsable_analisis, observaciones, id_producto_proceso  ) VALUES    (?,?,?,?,?,?,?,?,?,?,?)",
-       values
+  static async createNewPP(body) {
+    try {
+      console.log(body);
+      
+      const values = [
+        body.nombre_pp, body.fecha_analisis, body.fecha_toma_muestra,
+        body.hora_toma_muestra, body.lote, body.observaciones ?? null,
+        body.responsable_analisis, body.punto_muestra, body.punto_alterno ?? null
+      ];
+  
+      const [rows] = await conexion.execute(
+        "INSERT INTO producto_proceso (nombre_pp, fecha_analisis, fecha_toma_muestra, hora_toma_muestra, lote, observaciones, responsable_analisis, punto_muestra, punto_alterno) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        values
       );
+  
       if (rows.affectedRows > 0) {
-        return { success: true, message: "Exito creando el nuevo producto en proceso"};
+        return { success: true, message: "Éxito creando el nuevo producto en proceso" };
       } else {
-        return { success: false, message: "Error creando el nuevo producto en proceso"};
+        return { success: false, message: "Error creando el nuevo producto en proceso" };
       }
     } catch (error) {
       return { success: false, message: "Error interno al crear el nuevo producto en proceso", error: error };
     }
   }
+
   static async createNewPT(body) {//TERMINADA
     try {
-      const values =[body.fecha_analisis, body.fecha_empaque, body.hora_empaque, body.referencia, body.presentacion, body.maquina_envasadora, body.lote, body.responsable_analisis, body.observaciones, body.id_producto_terminado  ]
+      const values =[ body.fecha_env, body.fecha_vencimiento, body.ref, 
+        body.presentacion, body.lote, body.hora_empaque, body.maquina_envasadora, 
+        body.observaciones ?? null, body.responsable_analisis, body.id_producto_proceso  ]
       const [rows] = await conexion.execute(
-        "INSERT INTO producto_terminado (  fecha_analisis, fecha_empaque, hora_empaque, referencia, presentacion, maquina_envasadora, lote, responsable_analisis, observaciones, id_producto_terminado  ) VALUES  (?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO producto_terminado ( fecha_env, fecha_vencimiento, ref, presentacion, lote, hora_empaque, maquina_envasadora, observaciones,responsable_analisis, id_producto_proceso ) VALUES  (?,?,?,?,?,?,?,?,?,?)",
       values);
       if (rows.affectedRows > 0) {
         return { success: true, message: "Exito creando el nuevo producto terminado"};
@@ -87,9 +98,9 @@ export class modelos {
 
   static async createNewR(body) {//TERMINADA
     try {
-      const values =[body.fecha_registro, body.Coliformes, body.E_coli, body.Mohos_levaduras, body.observaciones, body.id_producto_proceso, body.id_producto_terminado]
+      const values =[body.fecha_analisis, body.e_coli, body.coliformes, body.mohos_ley, body.observaciones ?? null, body.cabina ?? null, body.medio_cultivo ?? null, body.id_pp ?? null, body.id_pt ?? null]
       const [rows] = await conexion.execute(
-        "INSERT INTO resultado (fecha_registro, Coliformes, E_coli, Mohos_levaduras, observaciones, id_producto_proceso, id_producto_terminado)VALUES   (?,?,?,?,?,?,?)",
+        "INSERT INTO resultados (fecha_analisis, e_coli, coliformes, mohos_ley, observaciones, cabina, medio_cultivo, id_pp, id_pt)VALUES   (?,?,?,?,?,?,?,?,?)",
       values);
       if (rows.affectedRows > 0) {
         return { success: true, message: "Exito ingresando el nuevo resultado"};
