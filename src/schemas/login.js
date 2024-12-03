@@ -8,5 +8,5 @@ export const schemaLogin = z.object({
 
 
 export function validarLogin(obj) {
-    return schemaLogin.partial().safeParse(obj)
+    return schemaLogin.safeParse(obj)
 };
