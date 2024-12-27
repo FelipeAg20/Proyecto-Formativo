@@ -2,6 +2,8 @@
 import { validarLogin } from "../schemas/login.js";
 import { generateToken  } from "../helpers/generateToken.js";
 import { serviceUser } from "../services/servicesU.js";
+import dotenv from 'dotenv';
+dotenv.config();
 // import cookieParser from 'cookie-parser';
 // app.use(cookieParser());
 
@@ -19,7 +21,6 @@ export let login = async (req, res) => {
       contraseña: contraseña,
     };
     const result = await serviceUser.login(usuario);
-    console.log(result.rol);
     
     if (result.success) {
       let resultToken = "";
