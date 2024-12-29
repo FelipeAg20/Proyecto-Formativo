@@ -36,9 +36,9 @@ INSERT INTO saborizacion (sabor, id_pp) VALUES
 
 CREATE TABLE producto_proceso (
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    nombre_pp ENUM('bebida semi elaborada','bebida pasteurizada', 'corte de bebida lactea'),
+    nombre_pp ENUM('Bebida semi elaborada','Bebida pasteurizada', 'Corte de bebida lactea'),
     fecha_analisis DATE DEFAULT (CURRENT_DATE),
-    fecha_toma_muesta DATE,
+    fecha_toma_muestra DATE,
     hora_toma_muestra TIME,
     lote VARCHAR(100),
     observaciones VARCHAR(255) NULL,
@@ -48,7 +48,7 @@ CREATE TABLE producto_proceso (
     FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id)
 );
 
-INSERT INTO producto_proceso (nombre_pp, fecha_analisis, fecha_toma_muesta, hora_tome_muestra, lote, observaciones, responsable_analisis, punto_muestra, punto_alterno) VALUES
+INSERT INTO producto_proceso (nombre_pp, fecha_analisis, fecha_toma_muestra, hora_tome_muestra, lote, observaciones, responsable_analisis, punto_muestra, punto_alterno) VALUES
 ('bebida semi elaborada', '2024-11-01', '2024-11-01', '08:00:00', 'Lote1', 'Observaciones 1', 1, 'Tanque 7', NULL),
 ('bebida pasteurizada', '2024-11-02', '2024-11-02', '09:00:00', 'Lote2', 'Observaciones 2', 1, 'Tanque 9', NULL),
 ('corte de bebida lactea', '2024-11-03', '2024-11-03', '10:00:00', 'Lote3', 'Observaciones 3', 1, 'Tanque 10', NULL),
