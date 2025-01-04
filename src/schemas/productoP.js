@@ -5,7 +5,7 @@ export const schemaNewPP = z.object({
   nombre_pp: z.enum([
     "Bebida semi elaborada",
     "Bebida pasteurizada",
-    "Borte de bebida lactea",
+    "Corte de bebida lactea",
   ]),
   fecha_analisis: z.string().transform((str) => new Date(str)),
   fecha_toma_muestra: z.string().transform((str) => new Date(str)), 
