@@ -9,7 +9,8 @@ export const schemaNewR = z.object({
     cabina: z.enum(['C','NC']).optional(),
     medio_cultivo: z.enum(['C','NC']).optional(),
     id_pp: z.number().optional(),
-    id_pt: z.number().optional()
+    id_pt: z.string().optional(),
+    responsable_analisis: z.number()
 })
 export function validarNewR(obj) {
     return schemaNewR.safeParse(obj)

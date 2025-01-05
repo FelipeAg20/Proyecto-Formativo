@@ -67,6 +67,8 @@ export const createNewPP = async (req, res) => {//TERMINADA
 };
 export const createNewPT = async (req, res) => {//TERMINADA
   try {
+    
+    
     const reqBody = req.body;
     const newPT = await modelos.createNewPT(reqBody);
     if(!(newPT.success) && newPT.error ){
