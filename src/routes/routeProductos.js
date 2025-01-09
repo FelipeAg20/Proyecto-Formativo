@@ -1,12 +1,13 @@
 import { Router } from "express";
 import { conexion } from "../db/conexion.js";
-import { getAllPP,getAllPT,getAllR,createNewPP,createNewPT,updatePP,updatePT, deletePP, deletePT,createNewR} from "../controller/controllers.js";
+import { getAllWithPP,getAllPP,getAllPT,getAllR,createNewPP,createNewPT,updatePP,updatePT, deletePP, deletePT,createNewR} from "../controller/controllers.js";
 import { pP,pT,r, parcialPP} from "../middleware/validaciones.js";
 export const routerProductos = Router();
 
 routerProductos
 
   //RUTAS DE OBTENER PP,PT Y R TERMINADAS
+  .get("/producto_terminado_nom_pp", getAllWithPP)//PT con nombre asociado de pp
   .get("/producto_proceso", getAllPP)
   .get("/producto_terminado", getAllPT)
   .get("/resultado", getAllR)
