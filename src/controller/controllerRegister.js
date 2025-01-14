@@ -11,7 +11,7 @@ export let register = async (req, res) => {
 
         const nuevo = await serviceUser.hashRegister(nuevoR)
         
-        res.status(200).json({messaje:'Creado con exito',dni:nuevoR.dni})
+        res.status(200).json({ success: true, messaje:'Creado con exito',dni:nuevoR.dni})
     }
 
 };
