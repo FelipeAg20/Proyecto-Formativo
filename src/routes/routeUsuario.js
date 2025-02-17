@@ -1,12 +1,11 @@
 import { Router } from "express"
 import { register } from "../controller/controllerRegister.js";
 import { login } from "../controller/controllerLogin.js";
-import { validarRegister } from "../schemas/register.js";
-import { validarRutaRegister } from "../middleware/validacionRutaRegister.js";
+import { validarAdministrador } from "../middleware/validarAdministrador.js";
 export const routerUsuarios = Router()
 
 routerUsuarios
   //RUTA PARA REGISTRARSE
-  .post("/register",register)
+  .post("/register", validarAdministrador, register)
   //RUTA PARA LOGIN 
-  .post("/login",login)
+  .post("/login", login)

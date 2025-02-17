@@ -8,8 +8,6 @@ dotenv.config();
 // app.use(cookieParser());
 
 export let login = async (req, res) => {
-  console.log(req.body);
-   
   let result = validarLogin(req.body);
   
   if (result.error) {
@@ -25,15 +23,15 @@ export let login = async (req, res) => {
     if (result.success) {
       let resultToken = "";
       if(result.rol == "analista"){
-        resultToken = generateToken({ id: result.id }, process.env.KEY_ANALISTA);
+        resultToken = generateToken({ id: result.id, rol:result.rol }, process.env.KEY_ANALISTA);
         
       }else{
-        resultToken = generateToken({ id: result.id }, process.env.KEY_ADMINISTRADOR);
+        resultToken = generateToken({ id: result.id, rol:result.rol }, process.env.KEY_ADMINISTRADOR);
       }
 
       return res
         .status(200)
-        .json({ success: true, message: "Inicio de sesion exitoso", result: resultToken,rol:result.rol})
+        .json({ success: true, message: "Inicio de sesion exitoso", result: resultToken})
         
     } else {
       return res

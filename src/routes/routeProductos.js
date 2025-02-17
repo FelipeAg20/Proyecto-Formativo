@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { conexion } from "../db/conexion.js";
+import { validarAnalista } from "../middleware/validarAnalista.js";
 import { getAllWithPP,getAllPP,getAllPT,getAllR,createNewPP,createNewPT,updatePP,updatePT, deletePP, deletePT,createNewR} from "../controller/controllers.js";
 import { pP,pT,r, parcialPP} from "../middleware/validaciones.js";
 export const routerProductos = Router();
@@ -7,25 +7,25 @@ export const routerProductos = Router();
 routerProductos
 
   //RUTAS DE OBTENER PP,PT Y R TERMINADAS
-  .get("/producto_terminado_nom_pp", getAllWithPP)//PT con nombre asociado de pp
-  .get("/producto_proceso", getAllPP)
-  .get("/producto_terminado", getAllPT)
-  .get("/resultado", getAllR)
+  .get("/producto_terminado_nom_pp",validarAnalista, getAllWithPP)//PT con nombre asociado de pp
+  .get("/producto_proceso",validarAnalista, getAllPP)
+  .get("/producto_terminado",validarAnalista, getAllPT)
+  .get("/resultado", validarAnalista, getAllR)
 
   //--------------------------------------
 
   // RUTAS CON VALIDACIONES IMPLEMENTADAS
-  .post("/registrar_pp",pP, createNewPP )
-  .post("/registrar_pt",pT, createNewPT)
-  .post("/registrar_r",r, createNewR)
+  .post("/registrar_pp",validarAnalista, pP, createNewPP )
+  .post("/registrar_pt",validarAnalista, pT, createNewPT)
+  .post("/registrar_r",validarAnalista, r, createNewR)
   //------------------------------------------
 
   //RUTAS DE ELIMINAR 
-  .delete("/eliminar_productoP/:id?",deletePP)
-  .delete("/eliminar_productoT/:id?",deletePT)
+  .delete("/eliminar_productoP/:id?",validarAnalista, deletePP)
+  .delete("/eliminar_productoT/:id?",validarAnalista, deletePT)
   //-----------------------------------------
 
 
   //RUTAS DE ACTUALIZAR 
-  .put('/actualizar_pp/:id',parcialPP, updatePP)
-  .put('/actualizar_terminado/:id', updatePT)
+  .put('/actualizar_pp/:id',validarAnalista, parcialPP, updatePP)
+  .put('/actualizar_terminado/:id',validarAnalista, updatePT)
