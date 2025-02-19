@@ -6,7 +6,7 @@ CREATE TABLE usuarios (
     dni INT NOT NULL,
     nombre VARCHAR(50) NOT NULL,
     contraseña varchar(20) NOT NULL,
-    rol ENUM('analista', 'administrador') NOT NULL
+    rol ENUM('Analista', 'Administrador') NOT NULL
 );
 
 
@@ -32,15 +32,15 @@ CREATE TABLE producto_terminado (
     fecha_env DATE DEFAULT (CURRENT_DATE),
     fecha_vencimiento DATE,
     ref ENUM('Mora','Melocoton', 'Fresa', 'Kumis'),
-    presentacion ENUM('1000', '200'),
+    presentacion ENUM('1000 ml', '200 ml'),
     lote VARCHAR(6),
     hora_empaque TIME,
-    maquina_envasadora ENUM('m1', 'm2', 'm3', 'm4'),
+    maquina_envasadora ENUM('M1', 'M2', 'M3', 'M4'),
     observaciones VARCHAR(100) NULL,
     responsable_analisis INT,
-    id_producto_proceso INT,
+    id_pp INT,
     FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id),
-    FOREIGN KEY (id_producto_proceso) REFERENCES producto_proceso(id)
+    FOREIGN KEY (id_pp) REFERENCES producto_proceso(id)
 );
 
 
