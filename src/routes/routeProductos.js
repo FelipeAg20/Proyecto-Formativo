@@ -1,10 +1,14 @@
 import { Router } from "express";
 import { validarAnalista } from "../middleware/validarAnalista.js";
-import { getAllWithPP,getAllPP,getAllPT,getAllR,createNewPP,createNewPT,updatePP,updatePT, deletePP, deletePT,createNewR} from "../controller/controllers.js";
+import { getResultId,getAllWithPP,getAllPP,getAllPT,getAllR,createNewPP,createNewPT,updatePP,updatePT, deletePP, deletePT,createNewR} from "../controller/controllers.js";
 import { pP,pT,r, parcialPP} from "../middleware/validaciones.js";
+
 export const routerProductos = Router();
 
 routerProductos
+
+  //Obtener resultados por id 
+  .get("/obtenerResultadosId",getResultId)
 
   //RUTAS DE OBTENER PP,PT Y R TERMINADAS
   .get("/producto_terminado_nom_pp",validarAnalista, getAllWithPP)//PT con nombre asociado de pp

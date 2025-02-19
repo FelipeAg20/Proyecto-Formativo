@@ -1,29 +1,219 @@
 import { conexion } from "../db/conexion.js";
 export class modelos {
-  static async getUsuarioPorId(id) {
+  //saborizacion
+  static async createSaborizacion(body) {
     try {
-      const [rows] = await conexion.execute('SELECT nombre, rol FROM usuarios WHERE id = ?', [id]);
-  
+      const values = [
+        body.sabor,
+        body.fecha_analisis,
+        body.fecha_toma_muestra,
+        body.hora_toma_muestra,
+        body.tanque,
+        body.lote,
+        body.observaciones ?? null,
+        body.responsable_analisis,
+      ];
+
+      const [rows] = await conexion.execute(
+        `INSERT INTO saborizacion 
+              (sabor, fecha_analisis, fecha_toma_muestra, hora_toma_muestra, tanque, lote, observaciones, responsable_analisis) 
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        values
+      );
+
+      if (rows.affectedRows > 0) {
+        return {
+          success: true,
+          message: "Éxito creando la nueva saborización",
+          insertedId: rows.insertId,
+        };
+      } else {
+        return {
+          success: false,
+          message: "Error creando la nueva saborización",
+        };
+      }
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        message: "Error interno al crear la nueva saborización",
+        error: error,
+      };
+    }
+  }
+  static async getAllSaborizacion() {
+    try {
+      const [rows] = await conexion.execute("SELECT * FROM `saborizacion`");
+
       if (rows.length > 0) {
         return {
           success: true,
-          message: 'Éxito trayendo el usuario',
-          result: rows[0],
+          message: "Éxito trayendo las saborizaciones",
+          result: rows,
         };
       } else {
         return {
           success: true,
-          message: 'No se encontró el usuario',
+          message: "No se encontraron saborizaciones",
         };
       }
     } catch (error) {
       return {
         success: false,
-        message: 'Error al traer el usuario',
+        message: "Error al traer las saborizaciones",
         error: error,
       };
     }
-  } 
+  }
+  static async updateSaborizacion(id, body) {
+    const values = [
+      body.sabor,
+      body.fecha_analisis,
+      body.fecha_toma_muestra,
+      body.hora_toma_muestra,
+      body.tanque,
+      body.lote,
+      body.observaciones ?? null,
+      body.responsable_analisis,
+    ];
+
+    try {
+      const [rows] = await conexion.execute(
+        `UPDATE saborizacion 
+             SET sabor = ?, fecha_analisis = ?, fecha_toma_muestra = ?, 
+                 hora_toma_muestra = ?, tanque = ?, lote = ?, 
+                 observaciones = ?, responsable_analisis = ? 
+             WHERE id = ?`,
+        [...values, id]
+      );
+
+      if (rows.affectedRows > 0) {
+        return {
+          success: true,
+          message: "Éxito actualizando la saborización",
+        };
+      } else {
+        return {
+          success: false,
+          message: "No se encontró la saborización o no se realizaron cambios",
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: "Error interno al actualizar la saborización",
+        error: error,
+      };
+    }
+  }
+  static async deleteSaborizacion(id) {
+    try {
+      const [rows] = await conexion.execute(
+        "DELETE FROM saborizacion WHERE id = ?",
+        [id]
+      );
+
+      if (rows.affectedRows > 0) {
+        return {
+          success: true,
+          message: "Éxito eliminando la saborización",
+        };
+      } else {
+        return {
+          success: false,
+          message: "No se encontró la saborización o ya fue eliminada",
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: "Error interno al eliminar la saborización",
+        error: error,
+      };
+    }
+  }
+  //----------------------------------------------------------------
+  //Obtener resultados por id
+  static async getResultId(body) {
+    let id = null;
+    let campo = null;
+
+    try {
+      switch (true) {
+        case !!body.id_pp:
+          id = body.id_pp;
+          campo = "id_pp";
+          break;
+        case !!body.id_pt:
+          id = body.id_pt;
+          campo = "id_pt";
+          break;
+        case !!body.id_sb:
+          id = body.id_sb;
+          campo = "id_sb";
+          break;
+        default:
+          return {
+            success: false,
+            message: "No se proporcionó un ID válido",
+          };
+      }
+
+      const [rows] = await conexion.execute(
+        `SELECT r.* FROM resultados r WHERE r.${campo} = ?`,
+        [id]
+      );
+
+      if (rows.length > 0) {
+        return {
+          success: true,
+          message: "Éxito al obtener los resultados",
+          result: rows,
+        };
+      } else {
+        return {
+          success: true,
+          message: "No se encontraron resultados",
+        };
+      }
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        message: "Error al obtener resultados",
+        error,
+      };
+    }
+  }
+  //----------------------------------------------------------------
+  static async getUsuarioPorId(id) {
+    try {
+      const [rows] = await conexion.execute(
+        "SELECT nombre, rol FROM usuarios WHERE id = ?",
+        [id]
+      );
+
+      if (rows.length > 0) {
+        return {
+          success: true,
+          message: "Éxito trayendo el usuario",
+          result: rows[0],
+        };
+      } else {
+        return {
+          success: true,
+          message: "No se encontró el usuario",
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: "Error al traer el usuario",
+        error: error,
+      };
+    }
+  }
   static async getAllWithPP() {
     try {
       const [rows] = await conexion.execute(`
@@ -54,31 +244,6 @@ export class modelos {
     }
   }
 
-  static async getAllPP() {
-    //TERMINADA
-    try {
-      const [rows] = await conexion.execute("SELECT * FROM `producto_proceso`");
-
-      if (rows.length > 0) {
-        return {
-          success: true,
-          message: "Exito trayendo los productos en proceso",
-          result: rows,
-        };
-      } else {
-        return {
-          success: true,
-          message: "No se encontraron productos en proceso",
-        };
-      }
-    } catch (error) {
-      return {
-        success: false,
-        message: "Error al traer los productos en proceso",
-        error: error,
-      };
-    }
-  }
   static async getAllPT() {
     //TERMINADA
     try {
@@ -199,7 +364,6 @@ export class modelos {
     try {
       //Crear la funcion que cree el id con base a los datos del producto en proceso referenciado en => body.id_producto_proceso
 
-
       const values = [
         // id    tenga la funcion, cambia pone la variable aqui de primera y se melo
         body.fecha_analisis,
@@ -213,10 +377,9 @@ export class modelos {
         body.observaciones ?? null,
         body.responsable_analisis,
         body.id_producto_proceso,
-
       ];
       console.log(body);
-      
+
       const [rows] = await conexion.execute(
         "INSERT INTO producto_terminado ( id, fecha_analisis, fecha_env, fecha_vencimiento, ref, presentacion, lote, hora_empaque, maquina_envasadora, observaciones,responsable_analisis, id_producto_proceso ) VALUES  (?,?,?,?,?,?,?,?,?,?,?,?)",
         values

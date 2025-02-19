@@ -19,6 +19,8 @@ export const schemaNewPP = z.object({
     "Tanque 10",
     "Tanque 12",
     "alternativo",
+    "Fabricación", 
+    "Pasteurizador"
   ]), 
   punto_alterno: z.string().optional()
 });

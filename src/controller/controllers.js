@@ -1,4 +1,18 @@
 import { modelos } from "../model/model.js";
+export const getResultId = async (req, res) => {//Obtener pt con nombre asociado a pp
+  try {
+    const bodyIdes = req.body
+    const getResultId = await modelos.getResultId(bodyIdes);
+    if(!(getResultId.success) && getResultId.error ){
+      res.status(500).json(getResultId);
+    }else{
+      res.status(200).json(getResultId);
+    }
+  } catch (err) {
+    res.status(500).json({success: false, message: "Error interno", error: err });
+  }
+ 
+}
 export const getUsuario = async (req, res) => {//Obtener nom y rol por id
   try {
     const userId = req.params.id;
@@ -13,7 +27,6 @@ export const getUsuario = async (req, res) => {//Obtener nom y rol por id
     res.status(500).json({ success: false, message: 'Error interno', error: err });
   }
 };
-
 export const getAllWithPP = async (req, res) => {//Obtener pt con nombre asociado a pp
   try {
     const getAllWithPP = await modelos.getAllWithPP();
@@ -27,9 +40,6 @@ export const getAllWithPP = async (req, res) => {//Obtener pt con nombre asociad
   }
  
 }
-
-
-
 export const getAllPP = async (req, res) => {//TERMINADA
   //Controlador productos terminado
   try {
