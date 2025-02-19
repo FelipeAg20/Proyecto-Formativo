@@ -6,9 +6,9 @@ export const schemaNewPT = z.object({
     fecha_vencimiento: z.string().transform((str) => new Date(str)),
     hora_empaque: z.string(),
     lote: z.string(),
-    maquina_envasadora: z.enum(['m1', 'm2', 'm3', 'm4']),
+    maquina_envasadora: z.enum(['M1', 'M2', 'M3', 'M4']),
     observaciones: z.string().optional(),
-    presentacion: z.enum(['1000', '200']),
+    presentacion: z.enum(['1000 ml', '200 ml']),
     ref: z.string(),
     responsable_analisis: z.number(),
     id_producto_proceso: z.number()

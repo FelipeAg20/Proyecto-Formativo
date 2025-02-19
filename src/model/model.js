@@ -23,7 +23,7 @@ export class modelos {
         error: error,
       };
     }
-  }
+  } 
   static async getAllWithPP() {
     try {
       const [rows] = await conexion.execute(`
