@@ -22,7 +22,7 @@ export let login = async (req, res) => {
     
     if (result.success) {
       let resultToken = "";
-      if(result.rol == "analista"){
+      if(result.rol == "Analista"){
         resultToken = generateToken({ id: result.id, rol:result.rol }, process.env.KEY_ANALISTA);
         
       }else{
