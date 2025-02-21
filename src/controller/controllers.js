@@ -1,4 +1,68 @@
 import { modelos } from "../model/model.js";
+//Saborizacion
+export const getSaborizacion = async (req, res) => {//TERMINADA
+  
+  try {
+    const getSaborizacion = await modelos.getAllSaborizacion();
+    if(!(getSaborizacion.success) && getSaborizacion.error ){
+      res.status(500).json(getSaborizacion);
+    }else{
+      res.status(200).json(getSaborizacion);
+    }
+  } catch (err) {
+    res.status(500).json({success: false, message: "Error interno", error: err });
+  }
+};
+export const createSaborizacion = async (req, res) => {//TERMINADA
+  try {
+    const reqBody = req.body;
+    const newSaborizacion = await modelos.createSaborizacion(reqBody);
+    if(!( newSaborizacion.success) &&  newSaborizacion.error ){
+      res.status(500).json(newPP);
+    }else if (! newSaborizacion.success){
+      res.status(500).json( newSaborizacion);
+    }else{
+      res.status(201).json( newSaborizacion);
+    }
+  } catch (err) {
+    res.status(500).json({success: false, message: "Error interno", error: err });
+  }
+};
+export const updateSaborizacion = async (req, res) => {//sin terminar
+  try {
+    const reqBody = req.body
+    const id = req.params.id
+
+    const updatedSaborizacion = await modelos.updateSaborizacion(id, reqBody);
+    if(!(updatedSaborizacion.success) && updatedSaborizacion.error ){
+      res.status(500).json(updatedSaborizacion);
+    }else if (!updatedSaborizacion.success){
+      res.status(500).json(updatedSaborizacion);
+    }else{
+      res.status(200).json(updatedSaborizacion);
+    }
+} catch (err) {
+  res.status(500).json({success: false, message: "Error interno", error: err });
+}
+};
+export const deleteSaborizacion = async (req, res) => {//sin terminar
+  try {
+    const id = req.params
+
+    const deletedSaborizacion = await modelos.deleteSaborizacion(id);
+    if(!(deletedSaborizacion.success) && deletedSaborizacion.error ){
+      res.status(500).json(deletedSaborizacion);
+    }else if (!deletedSaborizacion.success){
+      res.status(500).json(deletedSaborizacion);
+    }else{
+      res.status(200).json(deletedSaborizacion);
+    }
+  } catch (err) {
+    res.status(500).json({success: false, message: "Error interno", error: err });
+  }
+};
+//----------------------------------------------------------------
+//Controlador productos terminado
 export const getResultId = async (req, res) => {//Obtener pt con nombre asociado a pp
   try {
     const bodyIdes = req.body

@@ -1,11 +1,17 @@
 import { Router } from "express";
 import { validarAnalista } from "../middleware/validarAnalista.js";
-import { getResultId,getAllWithPP,getAllPP,getAllPT,getAllR,createNewPP,createNewPT,updatePP,updatePT, deletePP, deletePT,createNewR} from "../controller/controllers.js";
+import {getSaborizacion,createSaborizacion,updateSaborizacion,deleteSaborizacion,getResultId,getAllWithPP,getAllPP,getAllPT,getAllR,createNewPP,createNewPT,updatePP,updatePT, deletePP, deletePT,createNewR} from "../controller/controllers.js";
 import { pP,pT,r, parcialPP} from "../middleware/validaciones.js";
 
 export const routerProductos = Router();
 
 routerProductos
+  //Saborizacion
+  .post("/registrar_saborizacion",createSaborizacion)
+  .get("/registrar_saborizacion",getSaborizacion)
+  .patch("/registrar_saborizacion",updateSaborizacion)
+  .delete("/eliminar_saborizacion",deleteSaborizacion)
+  //----------------------------------------------------------------
 
   //Obtener resultados por id 
   .get("/obtenerResultadosId",getResultId)
