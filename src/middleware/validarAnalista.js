@@ -13,6 +13,8 @@ export async function validarAnalista(req, res, next) {
 
     next();
   } catch(err) {
+    console.log(err);
+    
     return res
       .status(403)
       .json({success: false, message:"Acceso denegado, token invalido o expirado" });
