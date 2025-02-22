@@ -243,7 +243,33 @@ export class modelos {
       };
     }
   }
+  static async getAllPP() {
+    //TERMINADA
+    try {
+      const [rows] = await conexion.execute(
+        "SELECT * FROM `producto_proceso`"
+      );
 
+      if (rows.length > 0) {
+        return {
+          success: true,
+          message: "Exito trayendo los productos en proceso",
+          result: rows,
+        };
+      } else {
+        return {
+          success: true,
+          message: "No se encontraron productos en proceso",
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: "Error al traer los productos en proceso",
+        error: error,
+      };
+    }
+  }
   static async getAllPT() {
     //TERMINADA
     try {

@@ -1,6 +1,7 @@
 import { validarNewPP, validarPPParcial } from "../schemas/productoP.js";
 import { validarNewPT } from "../schemas/productoT.js";
 import { validarNewR } from "../schemas/resultado.js";
+import { validarNewSB } from "../schemas/saborizacion.js";
 
 
 export function pP(req, res, next) {
@@ -25,6 +26,25 @@ export function pP(req, res, next) {
 export function pT(req, res, next) {
   try {
     const body = validarNewPT(req.body);
+    if (body.error) {
+      return res.status(422).json({
+        status: false,
+        message: "Parametos es invalidos",
+        error: body.error,
+      });
+    } else {
+      next();
+    }
+  } catch (e) {
+    console.log("Error en los parametros" + e.message);
+    return res
+      .status(500)
+      .json({ status: false, message: "Error interno del servidor", error: e.message });
+  }
+}
+export function sB(req, res, next) {
+  try {
+    const body = validarNewSB(req.body);
     if (body.error) {
       return res.status(422).json({
         status: false,

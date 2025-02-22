@@ -1,16 +1,16 @@
 import { Router } from "express";
 import { validarAnalista } from "../middleware/validarAnalista.js";
 import {getSaborizacion,createSaborizacion,updateSaborizacion,deleteSaborizacion,getResultId,getAllWithPP,getAllPP,getAllPT,getAllR,createNewPP,createNewPT,updatePP,updatePT, deletePP, deletePT,createNewR} from "../controller/controllers.js";
-import { pP,pT,r, parcialPP} from "../middleware/validaciones.js";
+import { pP,pT,sB,r, parcialPP} from "../middleware/validaciones.js";
 
 export const routerProductos = Router();
 
 routerProductos
   //Saborizacion
-  .post("/registrar_saborizacion",createSaborizacion)
-  .get("/registrar_saborizacion",getSaborizacion)
-  .patch("/registrar_saborizacion",updateSaborizacion)
-  .delete("/eliminar_saborizacion",deleteSaborizacion)
+  .post("/registrar_saborizacion",validarAnalista,sB, createSaborizacion)
+  .get("/registrar_saborizacion",validarAnalista, getSaborizacion)
+  .patch("/registrar_saborizacion",validarAnalista, updateSaborizacion)
+  .delete("/eliminar_saborizacion",validarAnalista, deleteSaborizacion)
   //----------------------------------------------------------------
 
   //Obtener resultados por id 
