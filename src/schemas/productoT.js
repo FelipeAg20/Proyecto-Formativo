@@ -11,7 +11,7 @@ export const schemaNewPT = z.object({
     presentacion: z.enum(['1000 ml', '200 ml']),
     ref: z.string(),
     responsable_analisis: z.number(),
-    id_producto_proceso: z.number()
+    id_pp: z.number()
 })
 
 /* 

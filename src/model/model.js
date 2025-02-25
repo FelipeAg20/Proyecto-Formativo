@@ -1,4 +1,5 @@
 import { conexion } from "../db/conexion.js";
+import { generarSku } from "../helpers/sku.js";
 export class modelos {
   //saborizacion
   static async createSaborizacion(body) {
@@ -387,11 +388,15 @@ export class modelos {
   }
 
   static async createNewPT(body) {
+  
+    
     try {
+      let id = generarSku(body.lote,body.ref,body.presentacion)
+      console.log(id);
       //Crear la funcion que cree el id con base a los datos del producto en proceso referenciado en => body.id_producto_proceso
 
       const values = [
-        // id    tenga la funcion, cambia pone la variable aqui de primera y se melo
+        id,
         body.fecha_analisis,
         body.fecha_env,
         body.fecha_vencimiento,
@@ -402,12 +407,12 @@ export class modelos {
         body.maquina_envasadora,
         body.observaciones ?? null,
         body.responsable_analisis,
-        body.id_producto_proceso,
+        body.id_pp,
       ];
       console.log(body);
 
       const [rows] = await conexion.execute(
-        "INSERT INTO producto_terminado ( id, fecha_analisis, fecha_env, fecha_vencimiento, ref, presentacion, lote, hora_empaque, maquina_envasadora, observaciones,responsable_analisis, id_producto_proceso ) VALUES  (?,?,?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO producto_terminado ( id, fecha_analisis, fecha_env, fecha_vencimiento, ref, presentacion, lote, hora_empaque, maquina_envasadora, observaciones,responsable_analisis,id_pp ) VALUES  (?,?,?,?,?,?,?,?,?,?,?,?)",
         values
       );
       if (rows.affectedRows > 0) {
