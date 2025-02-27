@@ -9,7 +9,7 @@ export const schemaNewPT = z.object({
     maquina_envasadora: z.enum(['M1', 'M2', 'M3', 'M4']),
     observaciones: z.string().optional(),
     presentacion: z.enum(['1000 ml', '200 ml']),
-    ref: z.string(),
+    ref: z.enum(['Mora','Melocoton', 'Fresa', 'Kumis']),
     responsable_analisis: z.number(),
     id_pp: z.number()
 })

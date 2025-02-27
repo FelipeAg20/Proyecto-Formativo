@@ -220,7 +220,7 @@ export class modelos {
       const [rows] = await conexion.execute(`
                 SELECT pt.*, pp.nombre_pp
                 FROM producto_terminado pt
-                JOIN producto_proceso pp ON pt.id_producto_proceso = pp.id
+                JOIN producto_proceso pp ON pt.id_pp = pp.id
             `);
 
       if (rows.length > 0) {

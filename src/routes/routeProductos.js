@@ -14,7 +14,7 @@ routerProductos
   //----------------------------------------------------------------
 
   //Obtener resultados por id 
-  .get("/obtenerResultadosId",getResultId)
+  .post("/obtenerResultadosId",validarAnalista,getResultId)
 
   //RUTAS DE OBTENER PP,PT Y R TERMINADAS
   .get("/producto_terminado_nom_pp",validarAnalista, getAllWithPP)//PT con nombre asociado de pp
