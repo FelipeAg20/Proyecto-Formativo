@@ -16,4 +16,3 @@ export const conexion = mysql2.createPool({
   database:process.env.DB_NOMBRE ||"l1m5",
   port:process.env.DB_PORT || 3305
 });
-

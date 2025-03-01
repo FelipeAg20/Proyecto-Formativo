@@ -1,6 +1,101 @@
 import { conexion } from "../db/conexion.js";
 import { generarSku } from "../helpers/sku.js";
 export class modelos {
+
+//RESULTADO
+  static async createResultado(body) {
+    try {
+        const values = [
+            body.e_coli,
+            body.coliformes,
+            body.observaciones,
+            body.cabina,
+            body.responsable_analisis,
+            body.medio_cultivo,
+            body.fecha_24h,
+            body.id_pp ?? null,
+            body.id_sb ?? null,
+            body.id_pt ?? null
+        ];
+
+        const [rows] = await conexion.execute(
+            `INSERT INTO resultados 
+            (e_coli, coliformes, observaciones, cabina, responsable_analisis, medio_cultivo, fecha_24h, id_pp, id_sb, id_pt) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            values
+        );
+
+        if (rows.affectedRows > 0) {
+            return {
+                success: true,
+                message: "Éxito creando el resultado",
+                insertedId: rows.insertId,
+            };
+        } else {
+            return {
+                success: false,
+                message: "Error creando el resultado",
+            };
+        }
+    } catch (error) {
+        console.error(error);
+        return {
+            success: false,
+            message: "Error interno al crear el resultado",
+            error: error,
+        };
+    }
+}
+static async updateResultado(id, body) {
+  try {
+      const values = [
+          body.mohos_ley ?? null,
+          body.observaciones ?? null,
+          body.responsable_analisis ?? null,
+          body.fecha_5d ?? null,
+          body.id_pp ?? null,
+          body.id_sb ?? null,
+          body.id_pt ?? null,
+          id 
+      ];
+
+      const [rows] = await conexion.execute(
+          `UPDATE resultados 
+          SET mohos_ley = ?, 
+              observaciones = ?, 
+              responsable_analisis = ?, 
+              fecha_5d = ?, 
+              id_pp = ?, 
+              id_sb = ?, 
+              id_pt = ? 
+          WHERE id = ?`,
+          values
+      );
+
+      if (rows.affectedRows > 0) {
+          return {
+              success: true,
+              message: "Éxito actualizando el resultado",
+          };
+      } else {
+          return {
+              success: false,
+              message: "No se encontró el resultado para actualizar",
+          };
+      }
+  } catch (error) {
+      console.error(error);
+      return {
+          success: false,
+          message: "Error interno al actualizar el resultado",
+          error: error,
+      };
+  }
+}
+//----------------------------------------------------------------/
+
+
+
   //saborizacion
   static async createSaborizacion(body) {
     try {
