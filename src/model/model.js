@@ -9,7 +9,7 @@ export class modelos {
         body.coliformes,
         body.observaciones,
         body.cabina,
-        body.responsable_analisis,
+        body.responsable_analisis_24,
         body.medio_cultivo,
         body.fecha_24h,
         body.id_pp ?? null,
@@ -19,7 +19,7 @@ export class modelos {
 
       const [rows] = await conexion.execute(
         `INSERT INTO resultados 
-            (e_coli, coliformes, observaciones, cabina, responsable_analisis, medio_cultivo, fecha_24h, id_pp, id_sb, id_pt) 
+            (e_coli, coliformes, observaciones, cabina, responsable_analisis_24, medio_cultivo, fecha_24h, id_pp, id_sb, id_pt) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         values
       );
@@ -74,7 +74,7 @@ export class modelos {
         const values = [
             body.mohos_ley ?? null,
             body.observaciones ?? null,
-            body.responsable_analisis ?? null,
+            body.responsable_analisis_5 ?? null,
             body.fecha_5d ?? null,
             whereValue 
         ];
@@ -83,7 +83,7 @@ export class modelos {
             UPDATE resultados 
             SET mohos_ley = ?, 
                 observaciones = ?, 
-                responsable_analisis = ?, 
+                responsable_analisis_5 = ?, 
                 fecha_5d = ? 
             WHERE ${whereClause}
         `;
