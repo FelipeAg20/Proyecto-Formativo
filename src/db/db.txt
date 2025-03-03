@@ -70,10 +70,17 @@ CREATE TABLE resultados(
     id_pp INT NULL,
     id_pt VARCHAR(255) NULL,
     id_sb INT NULL,
-    responsable_analisis INT,
-    FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id),
+    responsable_analisis_24 INT NULL,
+    responsable_analisis_5 INT NULL,
+    FOREIGN KEY (responsable_analisis_24) REFERENCES usuarios(id),
+    FOREIGN KEY (responsable_analisis_5) REFERENCES usuarios(id),
     FOREIGN KEY (id_pp) REFERENCES producto_proceso(id),
     FOREIGN KEY (id_pt) REFERENCES producto_terminado(id),
     FOREIGN KEY (id_sb) REFERENCES saborizacion(id)	
 );
 
+INSERT INTO resultados (
+    cabina, coliformes, e_coli, fecha_24h, id_pp, medio_cultivo, observaciones, responsable_analisis
+) VALUES (
+    'C', 12, 12, '2025-02-28', 1, 'C', '', 2
+);
