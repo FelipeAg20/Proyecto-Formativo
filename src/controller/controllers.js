@@ -1,4 +1,32 @@
 import { modelos } from "../model/model.js";
+//Controlador resultado
+export const createResultado = async (req, res) => {//TERMINADA
+  
+  try {
+    const resultado = await modelos.createResultado();
+    if(!(resultado.success) && resultado.error ){
+      res.status(500).json(resultado);
+    }else{
+      res.status(200).json(resultado);
+    }
+  } catch (err) {
+    res.status(500).json({success: false, message: "Error interno", error: err });
+  }
+};
+export const updateResultado= async (req, res) => {//TERMINADA
+  
+  try {
+    const resultado = await modelos.updateResultado();
+    if(!(resultado.success) && resultado.error ){
+      res.status(500).json(resultado);
+    }else{
+      res.status(200).json(resultado);
+    }
+  } catch (err) {
+    res.status(500).json({success: false, message: "Error interno", error: err });
+  }
+};
+//----------------------------------------------------------------
 //Saborizacion
 export const getSaborizacion = async (req, res) => {//TERMINADA
   

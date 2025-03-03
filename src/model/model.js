@@ -1,101 +1,117 @@
 import { conexion } from "../db/conexion.js";
 import { generarSku } from "../helpers/sku.js";
 export class modelos {
-
-//RESULTADO
+  //RESULTADO
   static async createResultado(body) {
     try {
-        const values = [
-            body.e_coli,
-            body.coliformes,
-            body.observaciones,
-            body.cabina,
-            body.responsable_analisis,
-            body.medio_cultivo,
-            body.fecha_24h,
-            body.id_pp ?? null,
-            body.id_sb ?? null,
-            body.id_pt ?? null
-        ];
+      const values = [
+        body.e_coli,
+        body.coliformes,
+        body.observaciones,
+        body.cabina,
+        body.responsable_analisis,
+        body.medio_cultivo,
+        body.fecha_24h,
+        body.id_pp ?? null,
+        body.id_sb ?? null,
+        body.id_pt ?? null,
+      ];
 
-        const [rows] = await conexion.execute(
-            `INSERT INTO resultados 
+      const [rows] = await conexion.execute(
+        `INSERT INTO resultados 
             (e_coli, coliformes, observaciones, cabina, responsable_analisis, medio_cultivo, fecha_24h, id_pp, id_sb, id_pt) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-            values
-        );
+        values
+      );
+
+      if (rows.affectedRows > 0) {
+        return {
+          success: true,
+          message: "Éxito creando el resultado",
+          insertedId: rows.insertId,
+        };
+      } else {
+        return {
+          success: false,
+          message: "Error creando el resultado",
+        };
+      }
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        message: "Error interno al crear el resultado",
+        error: error,
+      };
+    }
+  }
+  static async updateResultado(body) {
+    try {
+        let whereClause = "";
+        let whereValue = null;
+
+        
+        switch (true) {
+            case !!body.id_pp:
+                whereClause = "id_pp = ?";
+                whereValue = body.id_pp;
+                break;
+            case !!body.id_sb:
+                whereClause = "id_sb = ?";
+                whereValue = body.id_sb;
+                break;
+            case !!body.id_pt:
+                whereClause = "id_pt = ?";
+                whereValue = body.id_pt;
+                break;
+            default:
+                return {
+                    success: false,
+                    message: "Se necesita al menos un ID (id_pp, id_sb o id_pt) para actualizar",
+                };
+        }
+
+        const values = [
+            body.mohos_ley ?? null,
+            body.observaciones ?? null,
+            body.responsable_analisis ?? null,
+            body.fecha_5d ?? null,
+            whereValue 
+        ];
+
+        const sql = `
+            UPDATE resultados 
+            SET mohos_ley = ?, 
+                observaciones = ?, 
+                responsable_analisis = ?, 
+                fecha_5d = ? 
+            WHERE ${whereClause}
+        `;
+
+        const [rows] = await conexion.execute(sql, values);
 
         if (rows.affectedRows > 0) {
             return {
                 success: true,
-                message: "Éxito creando el resultado",
-                insertedId: rows.insertId,
+                message: "Éxito actualizando el resultado",
             };
         } else {
             return {
                 success: false,
-                message: "Error creando el resultado",
+                message: "No se encontró el resultado para actualizar",
             };
         }
     } catch (error) {
         console.error(error);
         return {
             success: false,
-            message: "Error interno al crear el resultado",
+            message: "Error interno al actualizar el resultado",
             error: error,
         };
     }
 }
-static async updateResultado(id, body) {
-  try {
-      const values = [
-          body.mohos_ley ?? null,
-          body.observaciones ?? null,
-          body.responsable_analisis ?? null,
-          body.fecha_5d ?? null,
-          body.id_pp ?? null,
-          body.id_sb ?? null,
-          body.id_pt ?? null,
-          id 
-      ];
 
-      const [rows] = await conexion.execute(
-          `UPDATE resultados 
-          SET mohos_ley = ?, 
-              observaciones = ?, 
-              responsable_analisis = ?, 
-              fecha_5d = ?, 
-              id_pp = ?, 
-              id_sb = ?, 
-              id_pt = ? 
-          WHERE id = ?`,
-          values
-      );
-
-      if (rows.affectedRows > 0) {
-          return {
-              success: true,
-              message: "Éxito actualizando el resultado",
-          };
-      } else {
-          return {
-              success: false,
-              message: "No se encontró el resultado para actualizar",
-          };
-      }
-  } catch (error) {
-      console.error(error);
-      return {
-          success: false,
-          message: "Error interno al actualizar el resultado",
-          error: error,
-      };
-  }
-}
-//----------------------------------------------------------------/
-
-
-
+  //----------------------------------------------------------------/
   //saborizacion
   static async createSaborizacion(body) {
     try {
@@ -342,9 +358,7 @@ static async updateResultado(id, body) {
   static async getAllPP() {
     //TERMINADA
     try {
-      const [rows] = await conexion.execute(
-        "SELECT * FROM `producto_proceso`"
-      );
+      const [rows] = await conexion.execute("SELECT * FROM `producto_proceso`");
 
       if (rows.length > 0) {
         return {
@@ -483,10 +497,8 @@ static async updateResultado(id, body) {
   }
 
   static async createNewPT(body) {
-  
-    
     try {
-      let id = generarSku(body.lote,body.ref,body.presentacion)
+      let id = generarSku(body.lote, body.ref, body.presentacion);
       console.log(id);
       //Crear la funcion que cree el id con base a los datos del producto en proceso referenciado en => body.id_producto_proceso
 
