@@ -7,8 +7,8 @@ export const routerProductos = Router();
 
 routerProductos
   //Resultado
-  .post("/registrar_saborizacion",r,validarAnalista, createResultado)
-  .patch("/registrar_saborizacion",rU,validarAnalista, updateResultado)
+  .post("/registrar_resultado",r,validarAnalista, createResultado)
+  .patch("/registrar_resultado",rU,validarAnalista, updateResultado)
   //Saborizacion
   .post("/registrar_saborizacion",validarAnalista,sB, createSaborizacion)
   .get("/registrar_saborizacion",validarAnalista, getSaborizacion)
