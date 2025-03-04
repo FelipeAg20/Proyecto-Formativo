@@ -4,10 +4,12 @@ export class modelos {
   //RESULTADO
   static async createResultado(body) {
     try {
+
+      
       const values = [
         body.e_coli,
         body.coliformes,
-        body.observaciones,
+        body.observaciones ?? null,
         body.cabina,
         body.responsable_analisis_24,
         body.medio_cultivo,

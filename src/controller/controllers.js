@@ -3,7 +3,7 @@ import { modelos } from "../model/model.js";
 export const createResultado = async (req, res) => {//TERMINADA
   
   try {
-    const resultado = await modelos.createResultado();
+    const resultado = await modelos.createResultado(req.body);
     if(!(resultado.success) && resultado.error ){
       res.status(500).json(resultado);
     }else{

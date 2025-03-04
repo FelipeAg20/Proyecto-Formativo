@@ -1,7 +1,7 @@
 import {z} from 'zod';
 
 export const schemaNewR = z.object({
-    fecha_24: z.string().transform((str) => new Date(str)),
+    fecha_24h: z.string().transform((str) => new Date(str)),
     e_coli: z.string(),
     coliformes: z.string(),
     observaciones: z.string().optional(),

@@ -30,7 +30,6 @@ routerProductos
   // RUTAS CON VALIDACIONES IMPLEMENTADAS
   .post("/registrar_pp",validarAnalista, pP, createNewPP )
   .post("/registrar_pt",validarAnalista, pT, createNewPT)
-  .post("/registrar_r",validarAnalista, r, createNewR)
   //------------------------------------------
 
   //RUTAS DE ELIMINAR 
