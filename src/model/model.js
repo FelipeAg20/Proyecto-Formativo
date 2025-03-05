@@ -1,11 +1,75 @@
 import { conexion } from "../db/conexion.js";
 import { generarSku } from "../helpers/sku.js";
 export class modelos {
+  //RESULTADOS COMPLETOS Y INCOMPLETOS
+  
+  static async getResultadosConFecha5d() {
+    try {
+      const [rows] = await conexion.execute(
+        `SELECT 
+            r.id AS id_resultado,
+            r.fecha_5d,
+            pp.id AS id_pp, pp.nombre_pp, pp.fecha_analisis AS fecha_analisis_pp,
+            pt.id AS id_pt, pt.ref, pt.fecha_analisis AS fecha_analisis_pt,
+            sb.id AS id_sb, sb.sabor, sb.fecha_analisis AS fecha_analisis_sb
+        FROM resultados r
+        LEFT JOIN producto_proceso pp ON r.id_pp = pp.id
+        LEFT JOIN producto_terminado pt ON r.id_pt = pt.id
+        LEFT JOIN saborizacion sb ON r.id_sb = sb.id
+        WHERE r.fecha_5d IS NOT NULL`
+      );
+  
+      return {
+        success: true,
+        message: "Éxito obteniendo los resultados con fecha de 5 días",
+        data: rows,
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        message: "Error interno al obtener los resultados",
+        error: error,
+      };
+    }
+  }
+  static async getResultadosIncompletos() {
+    try {
+      const [rows] = await conexion.execute(
+        `SELECT 
+            r.id AS id_resultado,
+            r.fecha_24h,
+            r.fecha_5d,
+            pp.id AS id_pp, pp.nombre_pp, pp.fecha_analisis AS fecha_analisis_pp,
+            pt.id AS id_pt, pt.ref, pt.fecha_analisis AS fecha_analisis_pt,
+            sb.id AS id_sb, sb.sabor, sb.fecha_analisis AS fecha_analisis_sb
+        FROM resultados r
+        LEFT JOIN producto_proceso pp ON r.id_pp = pp.id
+        LEFT JOIN producto_terminado pt ON r.id_pt = pt.id
+        LEFT JOIN saborizacion sb ON r.id_sb = sb.id
+        WHERE r.fecha_5d IS NULL`
+      );
+  
+      return {
+        success: true,
+        message: "Éxito obteniendo los resultados incompletos",
+        data: rows,
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        message: "Error interno al obtener los resultados incompletos",
+        error: error,
+      };
+    }
+  }
+  
+
+  //----------------------------------------------------------------/
   //RESULTADO
   static async createResultado(body) {
     try {
-
-      
       const values = [
         body.e_coli,
         body.coliformes,
@@ -49,37 +113,38 @@ export class modelos {
   }
   static async updateResultado(body) {
     try {
-        let whereClause = "";
-        let whereValue = null;
-        switch (true) {
-            case !!body.id_pp:
-                whereClause = "id_pp = ?";
-                whereValue = body.id_pp;
-                break;
-            case !!body.id_sb:
-                whereClause = "id_sb = ?";
-                whereValue = body.id_sb;
-                break;
-            case !!body.id_pt:
-                whereClause = "id_pt = ?";
-                whereValue = body.id_pt;
-                break;
-            default:
-                return {
-                    success: false,
-                    message: "Se necesita al menos un ID (id_pp, id_sb o id_pt) para actualizar",
-                };
-        }
+      let whereClause = "";
+      let whereValue = null;
+      switch (true) {
+        case !!body.id_pp:
+          whereClause = "id_pp = ?";
+          whereValue = body.id_pp;
+          break;
+        case !!body.id_sb:
+          whereClause = "id_sb = ?";
+          whereValue = body.id_sb;
+          break;
+        case !!body.id_pt:
+          whereClause = "id_pt = ?";
+          whereValue = body.id_pt;
+          break;
+        default:
+          return {
+            success: false,
+            message:
+              "Se necesita al menos un ID (id_pp, id_sb o id_pt) para actualizar",
+          };
+      }
 
-        const values = [
-            body.mohos_ley ?? null,
-            body.observaciones ?? null,
-            body.responsable_analisis_5 ?? null,
-            body.fecha_5d ?? null,
-            whereValue 
-        ];
+      const values = [
+        body.mohos_ley ?? null,
+        body.observaciones ?? null,
+        body.responsable_analisis_5 ?? null,
+        body.fecha_5d ?? null,
+        whereValue,
+      ];
 
-        const sql = `
+      const sql = `
             UPDATE resultados 
             SET mohos_ley = ?, 
                 observaciones = ?, 
@@ -88,31 +153,30 @@ export class modelos {
             WHERE ${whereClause}
         `;
 
-        const [rows] = await conexion.execute(sql, values);
+      const [rows] = await conexion.execute(sql, values);
 
-        if (rows.affectedRows > 0) {
-            return {
-                success: true,
-                message: "Éxito actualizando el resultado",
-            };
-        } else {
-            return {
-                success: false,
-                message: "No se encontró el resultado para actualizar",
-            };
-        }
-    } catch (error) {
-        console.error(error);
+      if (rows.affectedRows > 0) {
         return {
-            success: false,
-            message: "Error interno al actualizar el resultado",
-            error: error,
+          success: true,
+          message: "Éxito actualizando el resultado",
         };
+      } else {
+        return {
+          success: false,
+          message: "No se encontró el resultado para actualizar",
+        };
+      }
+    } catch (error) {
+      console.error(error);
+      return {
+        success: false,
+        message: "Error interno al actualizar el resultado",
+        error: error,
+      };
     }
-}
-
+  }
   //----------------------------------------------------------------/
-  //saborizacion
+  //SABORIZACION
   static async createSaborizacion(body) {
     try {
       const values = [
