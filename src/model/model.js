@@ -51,8 +51,6 @@ export class modelos {
     try {
         let whereClause = "";
         let whereValue = null;
-
-        
         switch (true) {
             case !!body.id_pp:
                 whereClause = "id_pp = ?";

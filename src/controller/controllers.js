@@ -16,7 +16,7 @@ export const createResultado = async (req, res) => {//TERMINADA
 export const updateResultado= async (req, res) => {//TERMINADA
   
   try {
-    const resultado = await modelos.updateResultado();
+    const resultado = await modelos.updateResultado(req.body);
     if(!(resultado.success) && resultado.error ){
       res.status(500).json(resultado);
     }else{
