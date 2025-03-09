@@ -562,12 +562,12 @@ export class modelos {
 
   static async createNewPT(body) {
     try {
-      let id = generarSku(body.lote, body.ref, body.presentacion);
-      console.log(id);
+      let id_pt = generarSku(body.lote, body.ref, body.presentacion);
+      console.log(id_pt);
       //Crear la funcion que cree el id con base a los datos del producto en proceso referenciado en => body.id_producto_proceso
 
       const values = [
-        id,
+        id_pt,
         body.fecha_analisis,
         body.fecha_env,
         body.fecha_vencimiento,
@@ -583,7 +583,7 @@ export class modelos {
       console.log(body);
 
       const [rows] = await conexion.execute(
-        "INSERT INTO producto_terminado ( id, fecha_analisis, fecha_env, fecha_vencimiento, ref, presentacion, lote, hora_empaque, maquina_envasadora, observaciones,responsable_analisis,id_pp ) VALUES  (?,?,?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO producto_terminado ( id_pt, fecha_analisis, fecha_env, fecha_vencimiento, ref, presentacion, lote, hora_empaque, maquina_envasadora, observaciones,responsable_analisis,id_pp ) VALUES  (?,?,?,?,?,?,?,?,?,?,?,?)",
         values
       );
       if (rows.affectedRows > 0) {

@@ -12,7 +12,7 @@ CREATE TABLE usuarios (
 
 
 CREATE TABLE producto_proceso (
-	id INT PRIMARY KEY AUTO_INCREMENT,
+	id_pp INT PRIMARY KEY AUTO_INCREMENT,
     nombre_pp ENUM('Bebida semi elaborada','Bebida pasteurizada', 'Corte de bebida lactea'),
     fecha_analisis DATE DEFAULT (CURRENT_DATE),
     fecha_toma_muestra DATE,
@@ -27,7 +27,7 @@ CREATE TABLE producto_proceso (
 
 
 CREATE TABLE producto_terminado (
-	id VARCHAR(20) PRIMARY KEY,
+	id_pt VARCHAR(20) PRIMARY KEY,
     fecha_analisis DATE DEFAULT (CURRENT_DATE),
     fecha_env DATE DEFAULT (CURRENT_DATE),
     fecha_vencimiento DATE,
@@ -45,7 +45,7 @@ CREATE TABLE producto_terminado (
 
 
 CREATE TABLE saborizacion(
-	id INT PRIMARY KEY AUTO_INCREMENT,
+	id_sb INT PRIMARY KEY AUTO_INCREMENT,
     sabor ENUM('Mora','Melocoton', 'Fresa', 'Kumis'),
     fecha_analisis DATE,
     fecha_toma_muestra DATE,
@@ -79,8 +79,36 @@ CREATE TABLE resultados(
     FOREIGN KEY (id_sb) REFERENCES saborizacion(id)	
 );
 
-INSERT INTO resultados (
-    cabina, coliformes, e_coli, fecha_24h, id_pp, medio_cultivo, observaciones, responsable_analisis
-) VALUES (
-    'C', 12, 12, '2025-02-28', 1, 'C', '', 2
-);
+INSERT INTO saborizacion (sabor, fecha_analisis, fecha_toma_muestra, hora_toma_muestra, tanque, lote, observaciones, responsable_analisis)
+
+VALUES ('Mora', '2025-03-05', '2025-03-03', '19:30:00', 'Tanque 9', 'MoT911111', NULL, 1),
+
+('Mora', '2025-03-05', '2025-03-03', '19:30:00', 'Tanque 9', 'MoT922222', NULL, 1),
+
+('Mora', '2025-03-05', '2025-03-03', '19:30:00', 'Tanque 9', 'MoT933333', NULL, 1),
+
+('Mora', '2025-03-05', '2025-03-03', '19:30:00', 'Tanque 9', 'MoT944444', NULL, 1),
+
+('Mora', '2025-03-05', '2025-03-03', '19:30:00', 'Tanque 9', 'MoT955555', NULL, 1);
+
+
+
+INSERT INTO resultados (fecha_24h, e_coli, coliformes, cabina, medio_cultivo, observaciones, id_sb, responsable_analisis_24)
+
+VALUES ('2025-03-05', '>1', '<1', 'C', 'NC', NULL, 1, 1), 
+
+('2025-03-05', '>1', '<1', 'C', 'NC', NULL, 2, 1),
+
+('2025-03-05', '>1', '<1', 'C', 'NC', NULL, 3, 1),
+
+('2025-03-05', '>1', '<1', 'C', 'NC', NULL, 4, 1),
+
+('2025-03-05', '>1', '<1', 'C', 'NC', NULL, 5, 1);
+
+
+
+UPDATE resultados SET fecha_5d = '2025-03-05', mohos_ley = '122', observaciones = NULL, responsable_analisis_5 = 1 WHERE id_sb = 1;
+
+UPDATE resultados SET fecha_5d = '2025-03-05', mohos_ley = '122', observaciones = NULL, responsable_analisis_5 = 1 WHERE id_sb = 3;
+
+UPDATE resultados SET fecha_5d = '2025-03-05', mohos_ley = '122', observaciones = NULL, responsable_analisis_5 = 1 WHERE id_sb = 4;
