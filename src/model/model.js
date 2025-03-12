@@ -9,13 +9,13 @@ export class modelos {
         `SELECT 
             r.id AS id_resultado,
             r.fecha_5d,
-            pp.id AS id_pp, pp.nombre_pp, pp.fecha_analisis AS fecha_analisis_pp,
-            pt.id AS id_pt, pt.ref, pt.fecha_analisis AS fecha_analisis_pt,
-            sb.id AS id_sb, sb.sabor, sb.fecha_analisis AS fecha_analisis_sb
+            pp.id_pp AS id_pp, pp.nombre_pp, pp.fecha_analisis AS fecha_analisis_pp,
+            pt.id_pt AS id_pt, pt.ref, pt.fecha_analisis AS fecha_analisis_pt,
+            sb.id_sb AS id_sb, sb.sabor, sb.fecha_analisis AS fecha_analisis_sb
         FROM resultados r
-        LEFT JOIN producto_proceso pp ON r.id_pp = pp.id
-        LEFT JOIN producto_terminado pt ON r.id_pt = pt.id
-        LEFT JOIN saborizacion sb ON r.id_sb = sb.id
+        LEFT JOIN producto_proceso pp ON r.id_pp = pp.id_pp
+        LEFT JOIN producto_terminado pt ON r.id_pt = pt.id_pt
+        LEFT JOIN saborizacion sb ON r.id_sb = sb.id_sb
         WHERE r.fecha_5d IS NOT NULL`
       );
   
@@ -40,13 +40,13 @@ export class modelos {
             r.id AS id_resultado,
             r.fecha_24h,
             r.fecha_5d,
-            pp.id AS id_pp, pp.nombre_pp, pp.fecha_analisis AS fecha_analisis_pp,
-            pt.id AS id_pt, pt.ref, pt.fecha_analisis AS fecha_analisis_pt,
-            sb.id AS id_sb, sb.sabor, sb.fecha_analisis AS fecha_analisis_sb
+            pp.id_pp AS id_pp, pp.nombre_pp, pp.fecha_analisis AS fecha_analisis_pp,
+            pt.id_pt AS id_pt, pt.ref, pt.fecha_analisis AS fecha_analisis_pt,
+            sb.id_sb AS id_sb, sb.sabor, sb.fecha_analisis AS fecha_analisis_sb
         FROM resultados r
-        LEFT JOIN producto_proceso pp ON r.id_pp = pp.id
-        LEFT JOIN producto_terminado pt ON r.id_pt = pt.id
-        LEFT JOIN saborizacion sb ON r.id_sb = sb.id
+        LEFT JOIN producto_proceso pp ON r.id_pp = pp.id_pp
+        LEFT JOIN producto_terminado pt ON r.id_pt = pt.id_pt
+        LEFT JOIN saborizacion sb ON r.id_sb = sb.id_sb
         WHERE r.fecha_5d IS NULL`
       );
   
