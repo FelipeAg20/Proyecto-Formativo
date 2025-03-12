@@ -4,35 +4,118 @@ export class modelos {
   //RESULTADOS COMPLETOS Y INCOMPLETOS
   
   static async getResultadosConFecha5d() {
-    try {
-      const [rows] = await conexion.execute(
-        `SELECT 
-            r.id AS id_resultado,
-            r.fecha_5d,
-            pp.id_pp AS id_pp, pp.nombre_pp, pp.fecha_analisis AS fecha_analisis_pp,
-            pt.id_pt AS id_pt, pt.ref, pt.fecha_analisis AS fecha_analisis_pt,
-            sb.id_sb AS id_sb, sb.sabor, sb.fecha_analisis AS fecha_analisis_sb
-        FROM resultados r
-        LEFT JOIN producto_proceso pp ON r.id_pp = pp.id_pp
-        LEFT JOIN producto_terminado pt ON r.id_pt = pt.id_pt
-        LEFT JOIN saborizacion sb ON r.id_sb = sb.id_sb
-        WHERE r.fecha_5d IS NOT NULL`
-      );
-  
-      return {
-        success: true,
-        message: "Éxito obteniendo los resultados con fecha de 5 días",
-        data: rows,
-      };
-    } catch (error) {
-      console.error(error);
-      return {
-        success: false,
-        message: "Error interno al obtener los resultados",
-        error: error,
-      };
-    }
+  try {
+    const [rows] = await conexion.execute(
+      `SELECT 
+        'PP' AS tipo, 
+        pp.id_pp AS id, 
+        pp.nombre_pp AS nombre, 
+        pp.fecha_analisis, 
+        pp.fecha_toma_muestra, 
+        pp.hora_toma_muestra, 
+        pp.lote, 
+        'Mora' AS ref, 
+        pp.punto_muestra, 
+        pp.punto_alterno,
+        NULL AS fecha_env, 
+        NULL AS fecha_vencimiento, 
+        NULL AS presentacion, 
+        NULL AS hora_empaque, 
+        NULL AS maquina_envasadora, 
+        NULL AS tanque, 
+        pp.observaciones AS observaciones_muestra, 
+        r.fecha_5d, 
+        r.e_coli, 
+        r.coliformes, 
+        r.mohos_ley, 
+        r.cabina, 
+        r.medio_cultivo, 
+        r.observaciones AS observaciones_resultado
+      FROM producto_proceso pp
+      JOIN resultados r ON pp.id_pp = r.id_pp
+      WHERE r.fecha_5d IS NOT NULL
+
+      UNION ALL
+
+      SELECT 
+        'PT' AS tipo, 
+        pt.id_pt AS id, 
+        pp.nombre_pp AS nombre,  -- Se usa el nombre de producto_proceso
+        pt.fecha_analisis, 
+        NULL AS fecha_toma_muestra, 
+        NULL AS hora_toma_muestra, 
+        pt.lote, 
+        pt.ref,
+        NULL AS punto_muestra, 
+        NULL AS punto_alterno, 
+        pt.fecha_env, 
+        pt.fecha_vencimiento, 
+        pt.presentacion, 
+        pt.hora_empaque, 
+        pt.maquina_envasadora, 
+        NULL AS tanque, 
+        pt.observaciones AS observaciones_muestra, 
+        r.fecha_5d, 
+        r.e_coli, 
+        r.coliformes, 
+        r.mohos_ley, 
+        r.cabina, 
+        r.medio_cultivo, 
+        r.observaciones AS observaciones_resultado
+      FROM producto_terminado pt
+      JOIN producto_proceso pp ON pt.id_pp = pp.id_pp  -- Se hace JOIN para obtener el nombre_pp
+      JOIN resultados r ON pt.id_pt = r.id_pt
+      WHERE r.fecha_5d IS NOT NULL
+
+      UNION ALL
+
+      SELECT 
+        'SB' AS tipo, 
+        sb.id_sb AS id, 
+        sb.sabor AS nombre, 
+        sb.fecha_analisis, 
+        sb.fecha_toma_muestra, 
+        sb.hora_toma_muestra, 
+        sb.lote, 
+        'Mora' AS ref,
+        NULL AS punto_muestra, 
+        NULL AS punto_alterno, 
+        NULL AS fecha_env, 
+        NULL AS fecha_vencimiento, 
+        NULL AS presentacion, 
+        NULL AS hora_empaque, 
+        NULL AS maquina_envasadora, 
+        sb.tanque, 
+        sb.observaciones AS observaciones_muestra, 
+        r.fecha_5d, 
+        r.e_coli, 
+        r.coliformes, 
+        r.mohos_ley, 
+        r.cabina, 
+        r.medio_cultivo, 
+        r.observaciones AS observaciones_resultado
+      FROM saborizacion sb
+      JOIN resultados r ON sb.id_sb = r.id_sb
+      WHERE r.fecha_5d IS NOT NULL;`
+    );
+
+    return {
+      success: true,
+      message: "Éxito obteniendo los resultados con fecha de 5 días",
+      data: rows,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Error interno al obtener los resultados",
+      error: error,
+    };
   }
+}
+
+  
+  
   static async getResultadosIncompletos() {
     try {
       const [rows] = await conexion.execute(
