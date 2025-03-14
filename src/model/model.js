@@ -1,6 +1,129 @@
 import { conexion } from "../db/conexion.js";
 import { generarSku } from "../helpers/sku.js";
 export class modelos {
+//Informes si tiene 24 o no tiene 
+static async get24oNo24Pp(){
+  try {
+    const [rows] = await conexion.execute(
+      `SELECT 
+    pp.id_pp,
+    pp.nombre_pp,
+    pp.fecha_analisis,
+    pp.lote,
+    pp.responsable_analisis,
+    r.fecha_24h,
+    r.fecha_5d,
+    r.e_coli,
+    r.coliformes,
+    r.mohos_ley,
+    r.observaciones,
+    r.cabina,
+    r.medio_cultivo
+FROM 
+    producto_proceso pp
+LEFT JOIN 
+    resultados r ON pp.id_pp = r.id_pp
+WHERE 
+    (r.fecha_5d IS NULL) -- NO debe tener resultado a 5 días
+    AND (r.fecha_24h IS NOT NULL OR r.fecha_24h IS NULL);`
+    );
+
+    return {
+      success: true,
+      message: "Éxito obteniendo los resultados incompletos",
+      data: rows,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Error interno al obtener los resultados incompletos",
+      error: error,
+    };
+  }
+}
+static async get24oNo24Pt(){
+  try {
+    const [rows] = await conexion.execute(
+      `SELECT 
+    pt.id_pt,
+    pt.ref,
+    pt.presentacion,
+    pt.fecha_analisis,
+    pt.lote,
+    r.fecha_24h,
+    r.fecha_5d,
+    r.e_coli,
+    r.coliformes,
+    r.mohos_ley,
+    r.observaciones,
+    r.cabina,
+    r.medio_cultivo
+FROM 
+    producto_terminado pt
+LEFT JOIN 
+    resultados r ON pt.id_pt = r.id_pt
+WHERE 
+    (r.fecha_5d IS NULL)
+    AND (r.fecha_24h IS NOT NULL OR r.fecha_24h IS NULL);`
+    );
+
+    return {
+      success: true,
+      message: "Éxito obteniendo los resultados incompletos",
+      data: rows,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Error interno al obtener los resultados incompletos",
+      error: error,
+    };
+  }
+}
+static async get24oNo24Sb(){
+  try {
+    const [rows] = await conexion.execute(
+      `SELECT 
+    sb.id_sb,
+    sb.sabor,
+    sb.fecha_analisis,
+    sb.lote,
+    r.fecha_24h,
+    r.fecha_5d,
+    r.e_coli,
+    r.coliformes,
+    r.mohos_ley,
+    r.observaciones,
+    r.cabina,
+    r.medio_cultivo
+FROM 
+    saborizacion sb
+LEFT JOIN 
+    resultados r ON sb.id_sb = r.id_sb
+WHERE 
+    (r.fecha_5d IS NULL)
+    AND (r.fecha_24h IS NOT NULL OR r.fecha_24h IS NULL);`
+    );
+
+    return {
+      success: true,
+      message: "Éxito obteniendo los resultados incompletos",
+      data: rows,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Error interno al obtener los resultados incompletos",
+      error: error,
+    };
+  }
+}
+
+
+
   //RESULTADOS COMPLETOS Y INCOMPLETOS
   
   static async getResultadosConFecha5d() {

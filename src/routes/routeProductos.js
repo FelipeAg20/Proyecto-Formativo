@@ -1,11 +1,16 @@
 import { Router } from "express";
 import { validarAnalista } from "../middleware/validarAnalista.js";
-import {getResultadosConFecha5d,getResultadosIncompletos,createResultado,updateResultado,getSaborizacion,createSaborizacion,updateSaborizacion,deleteSaborizacion,getResultId,getAllWithPP,getAllPP,getAllPT,getAllR,createNewPP,createNewPT,updatePP,updatePT, deletePP, deletePT,createNewR} from "../controller/controllers.js";
+import {get24oNo24Pp,get24oNo24Pt,get24oNo24Sb,getResultadosConFecha5d,getResultadosIncompletos,createResultado,updateResultado,getSaborizacion,createSaborizacion,updateSaborizacion,deleteSaborizacion,getResultId,getAllWithPP,getAllPP,getAllPT,getAllR,createNewPP,createNewPT,updatePP,updatePT, deletePP, deletePT,createNewR} from "../controller/controllers.js";
 import { pP,pT,sB,r, parcialPP, rU} from "../middleware/validaciones.js";
 
 export const routerProductos = Router();
 
 routerProductos
+
+//Infomes 24 o sin 24
+  .get("/muestras_pp_incompletos",validarAnalista,get24oNo24Pp)
+  .get("/muestras_pp_incompletos",validarAnalista,get24oNo24Pt)
+  .get("/muestras_pp_incompletos",validarAnalista,get24oNo24Sb)
   //Resultados 5d
   .get("/resultados_5d",getResultadosConFecha5d)
   .get("/resultados_incompletos",getResultadosIncompletos)

@@ -1,4 +1,50 @@
+import e from "cors";
 import { modelos } from "../model/model.js";
+//Informes 24 sin 24
+export const get24oNo24Pp= async (req, res) => {
+  try {
+    const resultado = await modelos.get24oNo24Pp();
+    if (!resultado.success && resultado.error) {
+      res.status(500).json(resultado);
+    } else {
+      res.status(200).json(resultado);
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ success: false, message: "Error interno", error: err });
+  }
+};
+export const get24oNo24Pt= async (req, res) => {
+  try {
+    const resultado = await modelos.get24oNo24Pt();
+    if (!resultado.success && resultado.error) {
+      res.status(500).json(resultado);
+    } else {
+      res.status(200).json(resultado);
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ success: false, message: "Error interno", error: err });
+  }
+};
+export const get24oNo24Sb= async (req, res) => {
+  try {
+    const resultado = await modelos.get24oNo24Sb();
+    if (!resultado.success && resultado.error) {
+      res.status(500).json(resultado);
+    } else {
+      res.status(200).json(resultado);
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ success: false, message: "Error interno", error: err });
+  }
+};
+
+
 //RESULTADO 5 y INCOMPLETOS
 export const getResultadosConFecha5d = async (req, res) => {
   //TERMINADA
