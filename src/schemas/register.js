@@ -4,7 +4,8 @@ export const schemaRegister = z.object({
   dni: z.string(),
   nombre: z.string(),
   rol: z.enum(['Administrador','Analista']),
-  contraseña :z.string()
+  contraseña :z.string(),
+  email: z.string().email()
   
 })
 
