@@ -9,8 +9,8 @@ routerProductos
 
 //Infomes 24 o sin 24
   .get("/muestras_pp_incompletos",validarAnalista,get24oNo24Pp)
-  .get("/muestras_pp_incompletos",validarAnalista,get24oNo24Pt)
-  .get("/muestras_pp_incompletos",validarAnalista,get24oNo24Sb)
+  .get("/muestras_pt_incompletos",validarAnalista,get24oNo24Pt)
+  .get("/muestras_sb_incompletos",validarAnalista,get24oNo24Sb)
   //Resultados 5d
   .get("/resultados_5d",getResultadosConFecha5d)
   .get("/resultados_incompletos",getResultadosIncompletos)
