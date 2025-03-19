@@ -10,8 +10,6 @@ CREATE TABLE usuarios (
     rol ENUM('Analista', 'Administrador') NOT NULL
 );
 
-
-
 CREATE TABLE producto_proceso (
 	id_pp INT PRIMARY KEY AUTO_INCREMENT,
     nombre_pp ENUM('Bebida semi elaborada','Bebida pasteurizada', 'Corte de bebida lactea'),
@@ -41,7 +39,7 @@ CREATE TABLE producto_terminado (
     responsable_analisis INT,
     id_pp INT,
     FOREIGN KEY (responsable_analisis) REFERENCES usuarios(id),
-    FOREIGN KEY (id_pp) REFERENCES producto_proceso(id)
+    FOREIGN KEY (id_pp) REFERENCES producto_proceso(id_pp)
 );
 
 
@@ -75,9 +73,9 @@ CREATE TABLE resultados(
     responsable_analisis_5 INT NULL,
     FOREIGN KEY (responsable_analisis_24) REFERENCES usuarios(id),
     FOREIGN KEY (responsable_analisis_5) REFERENCES usuarios(id),
-    FOREIGN KEY (id_pp) REFERENCES producto_proceso(id),
-    FOREIGN KEY (id_pt) REFERENCES producto_terminado(id),
-    FOREIGN KEY (id_sb) REFERENCES saborizacion(id)	
+    FOREIGN KEY (id_pp) REFERENCES producto_proceso(id_pp),
+    FOREIGN KEY (id_pt) REFERENCES producto_terminado(id_pt),
+    FOREIGN KEY (id_sb) REFERENCES saborizacion(id_sb)	
 );
 
 INSERT INTO saborizacion (sabor, fecha_analisis, fecha_toma_muestra, hora_toma_muestra, tanque, lote, observaciones, responsable_analisis)
