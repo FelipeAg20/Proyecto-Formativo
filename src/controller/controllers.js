@@ -44,6 +44,20 @@ export const get24oNo24Sb= async (req, res) => {
   }
 };
 
+export const getNotificaciones= async (req, res) => {
+  try {
+    const resultado = await modelos.getNotificaciones();
+    if (!resultado.success && resultado.error) {
+      res.status(500).json(resultado);
+    } else {
+      res.status(200).json(resultado);
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ success: false, message: "Error interno", error: err });
+  }
+};
 
 //RESULTADO 5 y INCOMPLETOS
 export const getResultadosConFecha5d = async (req, res) => {

@@ -1,12 +1,14 @@
 import { Router } from "express";
 import { validarAnalista } from "../middleware/validarAnalista.js";
-import {get24oNo24Pp,get24oNo24Pt,get24oNo24Sb,getResultadosConFecha5d,getResultadosIncompletos,createResultado,updateResultado,getSaborizacion,createSaborizacion,updateSaborizacion,deleteSaborizacion,getResultId,getAllWithPP,getAllPP,getAllPT,getAllR,createNewPP,createNewPT,updatePP,updatePT, deletePP, deletePT,createNewR} from "../controller/controllers.js";
+import {get24oNo24Pp,get24oNo24Pt,get24oNo24Sb,getResultadosConFecha5d,getResultadosIncompletos,createResultado,updateResultado,getSaborizacion,createSaborizacion,updateSaborizacion,deleteSaborizacion,getResultId,getAllWithPP,getAllPP,getAllPT,getAllR,createNewPP,createNewPT,updatePP,updatePT, deletePP, deletePT,createNewR, getNotificaciones} from "../controller/controllers.js";
 import { pP,pT,sB,r, parcialPP, rU} from "../middleware/validaciones.js";
 
 export const routerProductos = Router();
 
 routerProductos
 
+//RUTA DE NOTIFICACIONES
+  .get("/notificaciones",validarAnalista,getNotificaciones)
 //Infomes 24 o sin 24
   .get("/muestras_pp_incompletos",validarAnalista,get24oNo24Pp)
   .get("/muestras_pt_incompletos",validarAnalista,get24oNo24Pt)

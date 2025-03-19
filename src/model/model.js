@@ -10,7 +10,7 @@ static async get24oNo24Pp(){
     pp.nombre_pp,
     pp.fecha_analisis,
     pp.lote,
-    pp.responsable_analisis,
+    u.nombre AS responsable_analisis,
     r.fecha_24h,
     r.fecha_5d,
     r.e_coli,
@@ -23,6 +23,8 @@ FROM
     producto_proceso pp
 LEFT JOIN 
     resultados r ON pp.id_pp = r.id_pp
+LEFT JOIN 
+    usuarios u ON pp.responsable_analisis = u.id
 WHERE 
     (r.fecha_5d IS NULL) -- NO debe tener resultado a 5 días
     AND (r.fecha_24h IS NOT NULL OR r.fecha_24h IS NULL);`
@@ -46,26 +48,32 @@ static async get24oNo24Pt(){
   try {
     const [rows] = await conexion.execute(
       `SELECT 
-    pt.id_pt,
-    pt.ref,
-    pt.presentacion,
-    pt.fecha_analisis,
-    pt.lote,
-    r.fecha_24h,
-    r.fecha_5d,
-    r.e_coli,
-    r.coliformes,
-    r.mohos_ley,
-    r.observaciones,
-    r.cabina,
-    r.medio_cultivo
-FROM 
-    producto_terminado pt
-LEFT JOIN 
-    resultados r ON pt.id_pt = r.id_pt
-WHERE 
-    (r.fecha_5d IS NULL)
-    AND (r.fecha_24h IS NOT NULL OR r.fecha_24h IS NULL);`
+      pt.id_pt,
+      pt.ref,
+      pt.presentacion,
+      pt.fecha_analisis,
+      u.nombre AS responsable_analisis,
+      pt.lote,
+      r.fecha_24h,
+      r.fecha_5d,
+      r.e_coli,
+      r.coliformes,
+      r.mohos_ley,
+      r.observaciones,
+      r.cabina,
+      r.medio_cultivo,
+      pp.nombre_pp  -- Se agrega el nombre del producto en proceso
+  FROM 
+      producto_terminado pt
+  LEFT JOIN 
+      resultados r ON pt.id_pt = r.id_pt
+  LEFT JOIN 
+      producto_proceso pp ON pt.id_pp = pp.id_pp -- Se une con la tabla producto_proceso
+  LEFT JOIN 
+      usuarios u ON pt.responsable_analisis = u.id
+  WHERE 
+      (r.fecha_5d IS NULL)
+      AND (r.fecha_24h IS NOT NULL OR r.fecha_24h IS NULL);`
     );
 
     return {
@@ -89,6 +97,7 @@ static async get24oNo24Sb(){
     sb.id_sb,
     sb.sabor,
     sb.fecha_analisis,
+    u.nombre AS responsable_analisis,
     sb.lote,
     r.fecha_24h,
     r.fecha_5d,
@@ -102,6 +111,8 @@ FROM
     saborizacion sb
 LEFT JOIN 
     resultados r ON sb.id_sb = r.id_sb
+LEFT JOIN 
+    usuarios u ON sb.responsable_analisis = u.id
 WHERE 
     (r.fecha_5d IS NULL)
     AND (r.fecha_24h IS NOT NULL OR r.fecha_24h IS NULL);`
@@ -122,6 +133,111 @@ WHERE
   }
 }
 
+static async getNotificaciones(){
+  try {
+    const [rows] = await conexion.execute(
+      `SELECT 
+    '/ingreso_resultado_producto_p' AS ruta,
+    'pp' AS tipo, 
+    pp.id_pp AS id, 
+    pp.nombre_pp AS nombre, 
+    pp.fecha_analisis, 
+    pp.lote, 
+    pp.observaciones,
+    r.fecha_24h,
+    r.e_coli,
+    r.coliformes,
+    r.mohos_ley,
+    r.cabina,
+    r.medio_cultivo,
+    r.observaciones AS observaciones_resultado,
+    CASE 
+        WHEN r.fecha_24h IS NULL THEN 'Fecha 5' 
+        ELSE 'Fecha 24' 
+    END AS f24,
+    u.nombre AS analista -- Nombre del analista
+FROM producto_proceso pp
+LEFT JOIN resultados r ON pp.id_pp = r.id_pp
+LEFT JOIN usuarios u ON pp.responsable_analisis = u.id
+WHERE (pp.fecha_analisis = CURDATE() - INTERVAL 1 DAY 
+   OR pp.fecha_analisis = CURDATE() - INTERVAL 5 DAY)
+AND (r.fecha_5d IS NULL OR r.id IS NULL)  
+
+UNION 
+
+SELECT 
+    '/ingreso_resultado_producto_t' AS ruta,
+    'pt' AS tipo, 
+    pt.id_pt AS id, 
+    COALESCE(pp.nombre_pp, NULL) AS nombre, 
+    pt.fecha_analisis, 
+    pt.lote, 
+    pt.observaciones,
+    r.fecha_24h,
+    r.e_coli,
+    r.coliformes,
+    r.mohos_ley,
+    r.cabina,
+    r.medio_cultivo,
+    r.observaciones AS observaciones_resultado,
+    CASE 
+        WHEN r.fecha_24h IS NULL THEN 'Fecha 5' 
+        ELSE 'Fecha 24' 
+    END AS f24,
+    u.nombre AS analista
+FROM producto_terminado pt
+LEFT JOIN producto_proceso pp ON pt.id_pp = pp.id_pp  
+LEFT JOIN resultados r ON pt.id_pt = r.id_pt
+LEFT JOIN usuarios u ON pt.responsable_analisis = u.id
+WHERE (pt.fecha_analisis = CURDATE() - INTERVAL 1 DAY 
+   OR pt.fecha_analisis = CURDATE() - INTERVAL 5 DAY)
+AND (r.fecha_5d IS NULL OR r.id IS NULL)  
+
+UNION 
+
+SELECT
+    '/ingreso_resultado_sb' AS ruta,
+    'sb' AS tipo, 
+    sb.id_sb AS id, 
+    sb.sabor AS nombre, 
+    sb.fecha_analisis, 
+    sb.lote, 
+    sb.observaciones,
+    r.fecha_24h,
+    r.e_coli,
+    r.coliformes,
+    r.mohos_ley,
+    r.cabina,
+    r.medio_cultivo,
+    r.observaciones AS observaciones_resultado,
+    CASE 
+        WHEN r.fecha_24h IS NULL THEN 'Fecha 5' 
+        ELSE 'Fecha 24' 
+    END AS f24,
+    u.nombre AS analista
+FROM saborizacion sb
+LEFT JOIN resultados r ON sb.id_sb = r.id_sb
+LEFT JOIN usuarios u ON sb.responsable_analisis = u.id
+WHERE (sb.fecha_analisis = CURDATE() - INTERVAL 1 DAY 
+   OR sb.fecha_analisis = CURDATE() - INTERVAL 5 DAY)
+AND (r.fecha_5d IS NULL OR r.id IS NULL);
+    `
+    );
+
+    return {
+      success: true,
+      message: "Éxito obteniendo los resultados incompletos",
+      data: rows,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      success: false,
+      message: "Error interno al obtener los resultados incompletos",
+      error: error,
+    };
+  }
+}
 
 
   //RESULTADOS COMPLETOS Y INCOMPLETOS
