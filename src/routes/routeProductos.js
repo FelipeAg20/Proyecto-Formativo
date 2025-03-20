@@ -8,7 +8,7 @@ export const routerProductos = Router();
 routerProductos
 
 //RUTA DE NOTIFICACIONES
-  .get("/notificaciones",validarAnalista,getNotificaciones)
+  .get("/notificaciones",getNotificaciones)
 //Infomes 24 o sin 24
   .get("/muestras_pp_incompletos",validarAnalista,get24oNo24Pp)
   .get("/muestras_pt_incompletos",validarAnalista,get24oNo24Pt)

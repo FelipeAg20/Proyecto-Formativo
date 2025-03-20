@@ -16,7 +16,7 @@ export async function sendEmail({ email, dni, contraseña }) {
         html: `
             <h1>¡Bienvenido al sistema!</h1>
             <p>Tu cuenta ha sido registrada correctamente.</p>
-            <p>Ingresa con el DNI que te has registrado</p>
+            <p>Ingresa con tu DNI como usuario</p>
             <p><strong>Contraseña:</strong> ${contraseña}</p>
             <p>Por favor, cambia tu contraseña tras iniciar sesión, te amo mucho.</p>
         `
