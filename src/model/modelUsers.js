@@ -12,7 +12,9 @@ static async getUsers(){
     u.id,
     u.rol
     FROM 
-    usuarios u;`
+    usuarios u
+    WHERE
+    u.rol = 'Analista';`
     );
 
     return {
