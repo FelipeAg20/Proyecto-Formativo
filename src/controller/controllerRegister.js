@@ -13,14 +13,14 @@ export let register = async (req, res) => {
             let nuevoR = req.body
             let contraseña = req.body.contraseña
             const nuevo = await serviceUser.hashRegister(nuevoR)
-
+            
+            res.status(200).json({ success: true, messaje:'Creado con exito',dni:nuevoR.dni})
             await sendEmail({
                 email: nuevoR.email,
                 dni: nuevoR.dni,
                 contraseña: contraseña
             });
             
-            res.status(200).json({ success: true, messaje:'Creado con exito',dni:nuevoR.dni})
         }
     } catch (err) {
         res
