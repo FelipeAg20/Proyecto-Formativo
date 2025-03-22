@@ -23,10 +23,12 @@ export let login = async (req, res) => {
     if (result.success) {
       let resultToken = "";
       if(result.rol == "Analista"){
-        resultToken = generateToken({ id: result.id, rol:result.rol }, process.env.KEY_ANALISTA);
+        console.log(result);
+        
+        resultToken = generateToken({ id: result.id, rol:result.rol, nombre: result.nombre}, process.env.KEY_ANALISTA);
         
       }else{
-        resultToken = generateToken({ id: result.id, rol:result.rol }, process.env.KEY_ADMINISTRADOR);
+        resultToken = generateToken({ id: result.id, rol:result.rol, nombre: result.nombre}, process.env.KEY_ADMINISTRADOR);
       }
 
       return res
