@@ -283,6 +283,22 @@ export const getAllPT = async (req, res) => {
       .json({ success: false, message: "Error interno", error: err });
   }
 };
+export const getAllSB = async (req, res) => {
+  //TERMINADA
+  //Controlador productos terminado
+  try {
+    const allSB = await modelos.getAllSB();
+    if (!allSB.success && allSB.error) {
+      res.status(500).json(allSB);
+    } else {
+      res.status(200).json(allSB);
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .json({ success: false, message: "Error interno", error: err });
+  }
+};
 export const getAllR = async (req, res) => {
   //TERMINADA
   //Controlador Resultados

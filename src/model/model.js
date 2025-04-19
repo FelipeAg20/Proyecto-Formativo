@@ -744,7 +744,20 @@ AND (r.fecha_5d IS NULL OR r.id IS NULL);
   static async getAllPP() {
     //TERMINADA
     try {
-      const [rows] = await conexion.execute("SELECT * FROM `producto_proceso`");
+      const [rows] = await conexion.execute(
+        `SELECT
+          pp.id_pp,
+          pp.nombre_pp,
+          pp.fecha_analisis,
+          pp.fecha_toma_muestra,
+          pp.hora_toma_muestra,
+          pp.lote,
+          pp.punto_muestra,
+          pp.punto_alterno,
+          pp.observaciones,
+          u.nombre AS nombre_analista
+        FROM producto_proceso pp
+        JOIN usuarios u ON pp.responsable_analisis = u.id`);
 
       if (rows.length > 0) {
         return {
@@ -770,8 +783,23 @@ AND (r.fecha_5d IS NULL OR r.id IS NULL);
     //TERMINADA
     try {
       const [rows] = await conexion.execute(
-        "SELECT * FROM `producto_terminado`"
-      );
+        `SELECT 
+          pt.id_pt,
+          pt.fecha_analisis,
+          pt.fecha_env,
+          pt.fecha_vencimiento,
+          pt.ref,
+          pt.presentacion,
+          pt.lote,
+          pt.hora_empaque,
+          pt.maquina_envasadora,
+          pt.observaciones,
+          u.nombre AS nombre_analista,
+          pt.id_pp,
+          pp.nombre_pp
+        FROM producto_terminado pt
+        JOIN usuarios u ON pt.responsable_analisis = u.id
+        JOIN producto_proceso pp ON pt.id_pp = pp.id_pp`);
 
       if (rows.length > 0) {
         return {
@@ -789,6 +817,43 @@ AND (r.fecha_5d IS NULL OR r.id IS NULL);
       return {
         success: false,
         message: "Error al traer los productos terminados",
+        error: error,
+      };
+    }
+  }
+  static async getAllSB() {
+    //TERMINADA
+    try {
+      const [rows] = await conexion.execute(
+        `SELECT 
+          s.id_sb,
+          s.sabor,
+          s.fecha_analisis,
+          s.fecha_toma_muestra,
+          s.hora_toma_muestra,
+          s.tanque,
+          s.lote,
+          s.observaciones,
+          u.nombre AS nombre_analista
+        FROM saborizacion s
+        JOIN usuarios u ON s.responsable_analisis = u.id`);
+
+      if (rows.length > 0) {
+        return {
+          success: true,
+          message: "Exito trayendo las saborizaciones",
+          result: rows,
+        };
+      } else {
+        return {
+          success: true,
+          message: "No se encontraron saborizaciones",
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: "Error al traer las saborizaciones",
         error: error,
       };
     }

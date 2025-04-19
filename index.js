@@ -11,7 +11,7 @@ app.use(express.json());
 const port = process.env.PORT || 3001;
 app.use("/", routerUsuarios);
 app.use("/producto", routerProductos);
-app.listen(port, function (err) {
+app.listen(port, '0.0.0.0', function (err) {
   if (err) {
     throw err;
   } else {
